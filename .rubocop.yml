@@ -2,9 +2,12 @@
 
 AllCops:
   Exclude:
+    - '*.gemspec'
     - 'spec/dummy/**/*'
     - 'vendor/bundle/**/*'
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.4
+
+inherit_from: 'https://relaxed.ruby.style/rubocop.yml'
 
 # Sometimes I believe this reads better
 # This also causes spacing issues on multi-line fixes
@@ -16,10 +19,10 @@ Style/ClassVars:
   Enabled: false
 
 # We need these names for backwards compatability
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 # This has been used for customization
@@ -29,10 +32,10 @@ Style/MutableConstant:
 Style/ClassAndModuleChildren:
   Enabled: false
 
-Style/GuardClause:
+Style/EmptyElse:
   Enabled: false
 
-Style/WordArray:
+Style/GuardClause:
   Enabled: false
 
 Style/ConditionalAssignment:
@@ -44,188 +47,71 @@ Performance/Count:
 Style/RaiseArgs:
   Enabled: false
 
-Style/OpMethod:
+Naming/BinaryOperatorParameterName:
   Enabled: false
 
 # We can use good judgement here
 Style/RegexpLiteral:
   Enabled: false
 
-# Unicode comments are useful
-Style/AsciiComments:
-  Enabled: false
-
 Lint/EndAlignment:
   Enabled: false
 
-Style/ElseAlignment:
+Layout/ElseAlignment:
   Enabled: false
 
-Style/IndentationWidth:
+Layout/IndentationWidth:
   Enabled: false
 
-Style/AlignParameters:
+Layout/AlignParameters:
   Enabled: false
 
-Style/ClosingParenthesisIndentation:
+Layout/ClosingParenthesisIndentation:
   Enabled: false
 
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   Enabled: false
 
-Style/IndentArray:
+Layout/IndentArray:
   Enabled: false
 
-Style/IndentHash:
+Layout/IndentHash:
   Enabled: false
 
-Style/AlignHash:
+Layout/AlignHash:
   Enabled: false
 
-# From http://relaxed.ruby.style/
-
-Style/Alias:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylealias
-
-Style/BeginBlock:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylebeginblock
-
-Style/BlockDelimiters:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styleblockdelimiters
-
-Style/Documentation:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styledocumentation
-
-Style/DotPosition:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styledotposition
-
-Style/DoubleNegation:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styledoublenegation
-
-Style/EndBlock:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styleendblock
-
-Style/FormatString:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styleformatstring
-
-Style/IfUnlessModifier:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styleifunlessmodifier
-
-Style/Lambda:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylelambda
-
-Style/ModuleFunction:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylemodulefunction
-
-Style/MultilineBlockChain:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylemultilineblockchain
-
-Style/NegatedIf:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylenegatedif
-
-Style/NegatedWhile:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylenegatedwhile
-
-Style/ParallelAssignment:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styleparallelassignment
-
-Style/PercentLiteralDelimiters:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylepercentliteraldelimiters
-
-Style/PerlBackrefs:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#styleperlbackrefs
-
-Style/Semicolon:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylesemicolon
-
-Style/SignalException:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylesignalexception
-
-Style/SingleLineBlockParams:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylesinglelineblockparams
-
-Style/SingleLineMethods:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylesinglelinemethods
-
-Style/SpaceBeforeBlockBraces:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylespacebeforeblockbraces
-
-Style/SpaceInsideParens:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylespaceinsideparens
-
-Style/SpecialGlobalVars:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylespecialglobalvars
-
-Style/StringLiterals:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylestringliterals
-
-Style/SymbolProc:
+# Symbol Arrays are ok and the %i syntax widely unknown
+Style/SymbolArray:
   Enabled: false
 
-Style/WhileUntilModifier:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#stylewhileuntilmodifier
+# Rails/DynamicFindBy:
+#   Whitelist:
+#     - find_by_param
+#     - find_by_param!
 
-Lint/AmbiguousRegexpLiteral:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#lintambiguousregexpliteral
-
-Lint/AssignmentInCondition:
-  Enabled: false
-  StyleGuide: http://relaxed.ruby.style/#lintassignmentincondition
-
-Lint/HandleExceptions:
+# We use a lot of
+#
+#     expect {
+#       something
+#     }.to { happen }
+#
+# syntax in the specs files.
+Lint/AmbiguousBlockAssociation:
   Exclude:
-    - 'Rakefile'
+    - '*/spec/**/*'
+    - 'spec/**/*' # For the benefit of apps that inherit from this config
 
-Metrics/AbcSize:
+# We use eval to add common_spree_dependencies into the Gemfiles of each of our gems
+Security/Eval:
+  Exclude:
+    - 'Gemfile'
+    - 'common_spree_dependencies.rb'
+    - '*/Gemfile'
+
+Naming/VariableNumber:
   Enabled: false
 
-Metrics/BlockNesting:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/LineLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/ParameterLists:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
+# Write empty methods as you wish.
+Style/EmptyMethod:
   Enabled: false
