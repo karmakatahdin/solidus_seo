@@ -4,7 +4,7 @@ require 'solidus_seo/version'
 
 Gem::Specification.new do |s|
   s.name        = 'solidus_seo'
-  s.version     = 'SolidusSeo::VERSION'
+  s.version     = SolidusSeo::VERSION.to_s
   s.summary     = 'Enhanced SEO in Solidus'
   s.description = 'Enhanced SEO in Solidus'
   s.license     = 'BSD-3-Clause'
