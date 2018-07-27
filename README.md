@@ -1,7 +1,7 @@
 SolidusSeo
 ==========
 
-Introduction goes here.
+Successful stores keep SEO as a top priority. This Solidus extension adds common-sense defaults for Structured Data, Meta Tags, Image Optimization, and the Open Graph Protocol.
 
 Installation
 ------------
@@ -36,4 +36,4 @@ Simply add this require statement to your spec_helper:
 require 'solidus_seo/factories'
 ```
 
-Copyright (c) 2018 [name of extension creator], released under the New BSD License
+Copyright (c) 2018 Karma Creative LLC, released under the New BSD License
