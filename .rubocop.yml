@@ -5,6 +5,7 @@ AllCops:
     - '*.gemspec'
     - 'spec/dummy/**/*'
     - 'vendor/bundle/**/*'
+    - 'Rakefile'
   TargetRubyVersion: 2.4
 
 inherit_from: 'https://relaxed.ruby.style/rubocop.yml'
