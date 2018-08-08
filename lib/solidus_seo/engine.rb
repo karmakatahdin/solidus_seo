@@ -6,6 +6,8 @@ module SolidusSeo
     isolate_namespace Spree
     engine_name 'solidus_seo'
 
+    config.autoload_paths += %W(#{config.root}/lib)
+
     # use rspec for tests
     config.generators do |g|
       g.test_framework :rspec

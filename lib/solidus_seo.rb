@@ -2,3 +2,4 @@
 
 require 'solidus_core'
 require 'solidus_seo/engine'
+require 'solidus_support'
