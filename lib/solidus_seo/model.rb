@@ -3,8 +3,6 @@ module SolidusSeo
     include SolidusSeo::Helpers::SanitizerHelper
     include SolidusSeo::Helpers::UrlHelper
 
-    def to_jsonld
-      raise "This method needs to be implemented!"
-    end
+    include SolidusSeo::Jsonld
   end
 end
