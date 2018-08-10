@@ -27,36 +27,34 @@ Spree::Product.class_eval do
     }
   end
 
-  def to_jsonld
-    @jsonld ||= begin
-      store = Spree::Store.default
+  def jsonld
+    store = Spree::Store.default
 
-      {
-        "@context": "http://schema.org/",
-        "@type": "Product",
-        "name": name,
-        "url": spree_route_helper.product_url(self, host: store.url),
-        "image": [
-          url_helper.image_url(display_image.attachment.url(:large), host: store_host),
-          url_helper.image_url(display_image.attachment.url(:xl), host: store_host),
-          url_helper.image_url(display_image.attachment.url(:wide), host: store_host),
-        ],
-        "description": plain_text(description),
-        "sku": sku,
-        "brand": brand.try(:name),
-        # "aggregateRating": {
-        #   "@type": "AggregateRating",
-        #   "ratingValue": "4.4",
-        #   "reviewCount": "89"
-        # },
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": master.default_price.currency,
-          "price": master.default_price.amount,
-          "itemCondition": "http://schema.org/NewCondition",
-          "availability": "http://schema.org/#{ can_supply_any? ? 'InStock' : 'OutOfStock'}",
-        }
-      }.compact.with_indifferent_access
-    end
+    {
+      "@context": "http://schema.org/",
+      "@type": "Product",
+      "name": name,
+      "url": spree_route_helper.product_url(self, host: store.url),
+      "image": [
+        url_helper.image_url(display_image.attachment.url(:large), host: store_host),
+        url_helper.image_url(display_image.attachment.url(:xl), host: store_host),
+        url_helper.image_url(display_image.attachment.url(:wide), host: store_host),
+      ],
+      "description": plain_text(description),
+      "sku": sku,
+      "brand": brand.try(:name),
+      # "aggregateRating": {
+      #   "@type": "AggregateRating",
+      #   "ratingValue": "4.4",
+      #   "reviewCount": "89"
+      # },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": master.default_price.currency,
+        "price": master.default_price.amount,
+        "itemCondition": "http://schema.org/NewCondition",
+        "availability": "http://schema.org/#{ can_supply_any? ? 'InStock' : 'OutOfStock'}",
+      }
+    }
   end
 end
