@@ -1,3 +1,3 @@
 ApplicationController.class_eval do
-  helper SolidusSeo::Helpers::TagHelper
+  helper SolidusSeo::Jsonld::TagHelper
 end
