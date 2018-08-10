@@ -1,16 +1,16 @@
 module SolidusSeo
-  module Helpers
+  module Jsonld
     module TagHelper
       def jsonld(item, exclude: nil, only: nil)
-        SolidusSeo::Base.new(item).print(exclude: exclude, only: only)
+        SolidusSeo::Jsonld::Base.new(item).print(exclude: exclude, only: only)
       end
 
       def jsonld_list(collection)
-        SolidusSeo::List.new(collection).print
+        SolidusSeo::Jsonld::List.new(collection).print
       end
 
       def jsonld_breadcrumbs(breadcrumbs)
-        SolidusSeo::Breadcrumbs.new(breadcrumbs).print
+        SolidusSeo::Jsonld::Breadcrumbs.new(breadcrumbs).print
       end
     end
   end
