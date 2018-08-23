@@ -18,7 +18,17 @@ module SolidusSeo
       end
 
       def store_host
-        @store_host ||= Spree::Store.default.url
+        @store_host ||=  begin
+          store_url = Spree::Store.default.url
+          store_url = "http#{'s' if ssl?}://#{store_url}" unless store_url =~ /^https?/
+          store_url
+        end
+      end
+
+      private
+
+      def ssl?
+        Rails.application.config.force_ssl
       end
     end
   end
