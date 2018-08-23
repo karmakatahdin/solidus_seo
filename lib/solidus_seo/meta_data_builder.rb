@@ -9,23 +9,19 @@ module SolidusSeo
     end
 
     def set_meta_data
-      # Defaults
-      meta = {
+      # Default data
+      meta_data = {
+        reverse: custom_title.present?,
         title: title,
-        keywords: current_store.meta_keywords,
-        description: current_store.meta_description,
         og: {
-          type: 'website',
-          title: :title,
-          keywords: :keywords,
-          description: :description,
           url: request.url,
+          description: :description,
+          title: :title,
         }
-      }
+      }.deep_merge(current_store.to_seo.deep_symbolize_keys)
+       .deep_merge(resource_meta_data)
 
-      meta = format_meta_data(meta.deep_merge(resource_meta_data))
-
-      set_meta_tags meta
+      set_meta_tags meta_data
     end
 
     def resource_meta_data
@@ -45,15 +41,7 @@ module SolidusSeo
         end
       end
 
-      meta
-    end
-
-    def format_meta_data(meta_data, tags = %i(description))
-      tags.each do |meta_tag|
-        meta_data[meta_tag] = plain_text(meta_data[meta_tag]) if meta_data[meta_tag].present?
-      end
-
-      meta_data
+      meta.deep_symbolize_keys
     end
   end
 end
