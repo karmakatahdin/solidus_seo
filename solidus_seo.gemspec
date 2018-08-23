@@ -18,6 +18,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'solidus_core', ['>= 1.1', '< 3']
   s.add_dependency 'solidus_support'
+  s.add_dependency 'paperclip-optimizer'
+  s.add_dependency 'image_optim_rails'
+  s.add_dependency 'image_optim_pack'
 
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'ffaker'
