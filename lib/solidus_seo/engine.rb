@@ -3,6 +3,7 @@
 module SolidusSeo
   class Engine < Rails::Engine
     require 'spree/core'
+
     isolate_namespace Spree
     engine_name 'solidus_seo'
 
@@ -17,6 +18,12 @@ module SolidusSeo
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
+    end
+
+    config.before_initialize do
+    end
+
+    config.after_initialize do
     end
 
     config.to_prepare(&method(:activate).to_proc)

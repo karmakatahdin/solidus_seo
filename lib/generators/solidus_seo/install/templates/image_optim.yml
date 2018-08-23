@@ -1,0 +1,17 @@
+skip_missing_workers: true
+allow_lossy: true
+verbose: false
+nice: 12
+jpegoptim:
+  strip: :all
+  max_quality: 82
+  allow_lossy: true
+jpegrecompress:
+  quality: 2
+  allow_lossy: true
+jpegtran:
+  progressive: true
+optipng:
+  level: 6
+pngout: false
+svgo: false
