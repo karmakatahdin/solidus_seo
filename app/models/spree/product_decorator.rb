@@ -10,6 +10,8 @@ Spree::Product.class_eval do
   end
 
   def seo_images
+    return [] unless display_image.attachment.file?
+
     [
       url_helper.image_url(display_image.attachment.url(:large), host: store_host),
       url_helper.image_url(display_image.attachment.url(:xl), host: store_host),
