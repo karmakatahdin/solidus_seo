@@ -2,7 +2,7 @@ module SolidusSeo
   module Jsonld
     module Core
       def to_jsonld
-        @jsonld ||= jsonld.delete_if { |_, v| v.blank? }.with_indifferent_access
+        @jsonld_data ||= jsonld_data.delete_if { |_, v| v.blank? }.with_indifferent_access
       end
 
       private
