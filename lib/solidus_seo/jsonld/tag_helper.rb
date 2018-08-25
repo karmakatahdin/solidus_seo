@@ -1,16 +1,47 @@
 module SolidusSeo
   module Jsonld
     module TagHelper
-      def jsonld(item, exclude: nil, only: nil)
-        SolidusSeo::Jsonld::Base.new(item).print(exclude: exclude, only: only)
+      # @param item [Object] A jsonld hash or any object that implements `to_jsonld` method
+      # @param opts[:exclude] [Array] Blacklist of attributes from jsonld
+      # @param opts[:only] [Array] Whitelist of attributes from jsonld
+      # @param opts[:force] [Boolean] Force cache miss
+      #
+      # @return [String] Retrieves jsonld tag markup.
+      def jsonld(item, opts = {})
+        jsonld_fetch(:base, item, opts.symbolize_keys)
       end
 
       def jsonld_list(collection)
-        SolidusSeo::Jsonld::List.new(collection).print
+        capture_jsonld(:list, jsonld_fetch(:list, collection))
       end
 
       def jsonld_breadcrumbs(breadcrumbs)
-        SolidusSeo::Jsonld::Breadcrumbs.new(breadcrumbs).print
+        jsonld_fetch(:breadcrumbs, breadcrumbs)
+      end
+
+      private
+
+      def capture_jsonld(key, value)
+        @jsonld ||= {}
+
+        return unless value
+        @jsonld[key.to_sym] = value
+      end
+
+      def dump_jsonld
+        @jsonld ||= {}
+        @jsonld.values.join("\n").html_safe
+      end
+
+      def jsonld_fetch(type = :base, items = nil, opts = {})
+        force = opts.extract!(:force) || false
+
+        jsonld_cache_key = [:jsonld, items, *opts.values].compact
+
+        Rails.cache.fetch(jsonld_cache_key, force: force) do
+          jsonld_builder_class = "SolidusSeo::Jsonld::#{type.to_s.titleize}".constantize
+          jsonld_builder_class.new(items).print(opts)
+        end
       end
     end
   end
