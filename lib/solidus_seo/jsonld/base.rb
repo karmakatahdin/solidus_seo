@@ -13,7 +13,7 @@ module SolidusSeo
         return if data.blank?
 
         output = filter(only: only, exclude: exclude)
-        javascript_tag(output.to_json, type: 'application/ld+json').html_safe
+        javascript_tag(JSON.pretty_generate(output), type: 'application/ld+json').html_safe
       end
 
       private
