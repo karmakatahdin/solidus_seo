@@ -34,7 +34,7 @@ module SolidusSeo
             # {
             #   "dayOfWeek": [
             #     "Monday",
-            #     "Tuesday"
+            #     "Tuesday",
             #     "Wednesday",
             #     "Thursday",
             #     "Friday"

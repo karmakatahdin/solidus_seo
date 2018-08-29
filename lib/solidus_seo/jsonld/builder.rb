@@ -18,13 +18,19 @@ module SolidusSeo
         # ignore empty props or not yet overridden methods
         return {} if prop_data.blank?
 
-        if prop_data.is_a? Array
-          prop_data.map! { |it| it.merge prop_base }
-        else
-          prop_data.reverse_merge! prop_base
-        end
+        prop_data = merge_prop_data(prop_base, prop_data)
 
         { prop_name.to_sym => prop_data }
+      end
+    end
+
+    def merge_prop_data(base_data, new_data)
+      if new_data.respond_to? :reverse_merge # Hash
+        new_data.reverse_merge base_data
+      elsif new_data.respond_to? :map # Array
+        new_data.map { |it| merge_prop_data(base_data, it) }
+      else # Scalar, pass it through
+        new_data
       end
     end
   end
