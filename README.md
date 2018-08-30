@@ -95,7 +95,7 @@ This is the base jsonld definition for your Spree::Store model, by default:
   "@context": "http://schema.org",
   "@type": "Organization",
   "name": "Your Store Name",
-  "logo": "https://yourstore.com/store_logo.jpg", // as defined in Spree::Config.logo
+  "logo": "https://yourstore.com/store_logo.jpg",
   "image": "https://yourstore.com/store_logo.jpg",
   "url": "https://yourstore.com",
   "@id": "https://yourstore.com",
@@ -187,7 +187,7 @@ Using the sample data above, the final output would look like this :
   "@context": "http://schema.org",
   "@type": "Organization",
   "name": "Your Store Name",
-  "logo": "https://yourstore.com/store_logo.jpg", // as defined in Spree::Config.logo
+  "logo": "https://yourstore.com/store_logo.jpg",
   "image": "https://yourstore.com/store_logo.jpg",
   "url": "https://yourstore.com",
   "@id": "https://yourstore.com",
