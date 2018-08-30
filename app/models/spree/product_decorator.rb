@@ -14,9 +14,7 @@ Spree::Product.class_eval do
 
     [
       url_helper.image_url(display_image.attachment.url(:large), host: store_host),
-      url_helper.image_url(display_image.attachment.url(:xl), host: store_host),
-      url_helper.image_url(display_image.attachment.url(:wide), host: store_host),
-    ]
+    ].compact
   end
 
   def seo_description
