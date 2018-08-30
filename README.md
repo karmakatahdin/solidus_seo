@@ -25,13 +25,23 @@ This gem provides a few helpers to generate and output the meta data.
 
 > Note: We're aware the recommended way to do these changes is via deface gem.
 
-If you don't have solidus views files in your application, you can generate and override them with:
+If you are already using deface for your view overrides, or custom non-solidus views, we assume you're smart enough to figure out where to put these helpers ;)
+
+If you don't have solidus views files in your application, you can generate them for overriding with:
 
 ```shell
 bundle exec rails g solidus:views:override --only <path-to-file>
 ```
 
-If you are already using deface for your view overrides, or custom non-solidus views, we assume you're smart enough to figure out where to put these helpers ;)
+In this case, you'll need to override these specific views:
+
+```shell
+bundle exec rails g solidus:views:override --only layouts/spree_application.html
+bundle exec rails g solidus:views:override --only products/show.html
+bundle exec rails g solidus:views:override --only shared/_head.html
+bundle exec rails g solidus:views:override --only shared/_products.html
+bundle exec rails g solidus:views:override --only shared/_taxon_breadcrumbs.html
+```
 
 The minimal installation requires you to perform the following changes to your solidus views:
 
@@ -58,6 +68,7 @@ The minimal installation requires you to perform the following changes to your s
 Make sure you've added your store metadata from the Solidus store administration page, like SEO title, store URL and meta description.
 
 At this point, the features you've gained are:
+
   - Default meta tags with and open graph tags, describing a product in PDP pages and store/site in all other pages.
   - Store jsonld markup on all your pages.
   - Product jsonld markup in PDP pages.
