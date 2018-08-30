@@ -19,18 +19,22 @@ module SolidusSeo
         jsonld_fetch(:breadcrumbs, breadcrumbs)
       end
 
-      private
-
-      def capture_jsonld(key, value)
-        @jsonld ||= {}
-
-        return unless value
-        @jsonld[key.to_sym] = value
+      def captured_jsonld
+        @captured_jsonld ||= {}
+        @captured_jsonld.values.join("\n").html_safe
       end
 
       def dump_jsonld
-        @jsonld ||= {}
-        @jsonld.values.join("\n").html_safe
+        captured_jsonld + jsonld(current_store)
+      end
+
+      private
+
+      def capture_jsonld(key, value)
+        @captured_jsonld ||= {}
+
+        return unless value
+        @captured_jsonld[key.to_sym] = value
       end
 
       def jsonld_fetch(type = :base, items = nil, opts = {})

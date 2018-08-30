@@ -1,8 +1,7 @@
 module SolidusSeo
   module Model
-    include SolidusSeo::Helpers::SanitizerHelper
+    include SolidusSeo::Helpers::BaseHelper
     include SolidusSeo::Helpers::UrlHelper
-
     include SolidusSeo::Jsonld
 
     def to_seo

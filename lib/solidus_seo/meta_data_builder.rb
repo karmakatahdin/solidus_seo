@@ -1,7 +1,7 @@
 module SolidusSeo
   module MetaDataBuilder
     include Spree::BaseHelper
-    include SolidusSeo::Helpers::SanitizerHelper
+    include SolidusSeo::Helpers::BaseHelper
 
     def render(*args)
       set_meta_data
