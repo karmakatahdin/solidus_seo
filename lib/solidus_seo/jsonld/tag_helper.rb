@@ -35,6 +35,7 @@ module SolidusSeo
 
         return unless value
         @captured_jsonld[key.to_sym] = value
+        nil # Ensure no output is returned
       end
 
       def jsonld_fetch(type = :base, items = nil, opts = {})
