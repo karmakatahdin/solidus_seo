@@ -8,7 +8,7 @@ module SolidusSeo
       source_root File.expand_path("../templates", __FILE__)
 
       def install_image_optim
-        run 'rails generate paperclip_optimizer:install'
+        run 'bundle exec rails g paperclip_optimizer:install'
         copy_file 'image_optim.yml', 'config/image_optim.yml'
         copy_file 'paperclip_optimizer.rb', 'config/initializers/paperclip_optimizer.rb', force: true
       end
