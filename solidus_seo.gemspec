@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir['test/**/*']
 
   s.add_dependency 'solidus_core', ['>= 1.1', '< 3']
+  s.add_dependency 'deface'
   s.add_dependency 'solidus_support'
   s.add_dependency 'meta-tags'
   s.add_dependency 'paperclip-optimizer'
