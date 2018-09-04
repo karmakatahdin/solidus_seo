@@ -13,7 +13,7 @@ begin
 
   RuboCop::RakeTask.new
 
-  task default: %i(first_run rubocop spec)
+  task default: %i(first_run spec) # TODO: add rubocop
 rescue LoadError
   # no rspec available
 end
