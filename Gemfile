@@ -8,6 +8,7 @@ gem "solidus", github: "solidusio/solidus", branch: branch
 gem 'solidus_auth_devise'
 
 if branch == 'master' || branch >= "v2.0"
+  gem "rails", '5.2.0' # workaround for bundler resolution issue
   gem "rails-controller-testing", group: :test
 else
   gem "rails", '~> 4.2.7' # workaround for bundler resolution issue
