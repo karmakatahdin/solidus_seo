@@ -1,0 +1,2 @@
+<!-- insert_before %{[data-hook=product_show]} -->
+<%= jsonld @product %>

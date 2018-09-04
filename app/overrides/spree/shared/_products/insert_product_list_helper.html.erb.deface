@@ -1,0 +1,4 @@
+<!--
+insert_before "#products[data-hook]"
+-->
+<% jsonld_list(products) %>
