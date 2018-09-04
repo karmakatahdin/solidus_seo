@@ -21,29 +21,11 @@ bundle exec rails g solidus_seo:install
 
 ### Views
 
-This gem provides a few helpers to generate and output the meta data.
+We use [Deface](https://github.com/spree/deface) to insert some helpers to generate and output the meta data. This, of course, only works if you're using solidus_frontend gem.
 
-> Note: We're aware the recommended way to do these changes is via deface gem.
+If you're using custom non-solidus views, we assume you're smart enough to figure out where to put those helpers ;)
 
-If you are already using deface for your view overrides, or custom non-solidus views, we assume you're smart enough to figure out where to put these helpers ;)
-
-If you don't have solidus views files in your application, you can generate them for overriding with:
-
-```shell
-bundle exec rails g solidus:views:override --only <path-to-file>
-```
-
-In this case, you'll need to override these specific views:
-
-```shell
-bundle exec rails g solidus:views:override --only layouts/spree_application.html
-bundle exec rails g solidus:views:override --only products/show.html
-bundle exec rails g solidus:views:override --only shared/_head.html
-bundle exec rails g solidus:views:override --only shared/_products.html
-bundle exec rails g solidus:views:override --only shared/_taxon_breadcrumbs.html
-```
-
-The minimal installation requires you to perform the following changes to your solidus views:
+These are the modifications we do, via deface, in solidus views as part of the minimal installation:
 
 - In `spree/shared/_head.html.erb`:
   - Replace `<%== meta_data_tags %>` line for `<%= display_meta_tags %>`.
@@ -59,11 +41,7 @@ The minimal installation requires you to perform the following changes to your s
 
 
 - In `spree/shared/_products.html.erb`:
-  - Insert `<%= jsonld_list(products) %>` at the bottom of file.
-
-
-- In `spree/shared/_taxon_breadcrumbs.html.erb`:
-  - Insert `<%= jsonld_breadcrumbs(breadcrumb_pairs(taxon)) %>` at the bottom of file.
+  - Insert `<% jsonld_list(products) %>` at the bottom of file.
 
 Make sure you've added your store metadata from the Solidus store administration page, like SEO title, store URL and meta description.
 
