@@ -4,9 +4,10 @@ Successful stores keep SEO as a top priority. This Solidus extension adds common
 
 ## Installation
 
-Add solidus_seo to your Gemfile:
+Add `solidus_seo` to your Gemfile:
 
 ```ruby
+gem 'deface'
 gem 'solidus_seo'
 ```
 
@@ -21,9 +22,9 @@ bundle exec rails g solidus_seo:install
 
 ### Views
 
-We use [Deface](https://github.com/spree/deface) to insert some helpers to generate and output the meta data. This, of course, only works if you're using solidus_frontend gem.
+We use [Deface](https://github.com/spree/deface) to insert some helpers that generate the meta data. This, of course, only works if you're using/overriding solidus views.
 
-If you're using custom non-solidus views, we assume you're smart enough to figure out where to put those helpers ;)
+Otherwise, if you're using custom non-solidus views, we assume you're smart enough to figure out where to put those helpers ;)
 
 These are the modifications we do, via deface, in solidus views as part of the minimal installation:
 
@@ -41,7 +42,7 @@ These are the modifications we do, via deface, in solidus views as part of the m
 
 
 - In `spree/shared/_products.html.erb`:
-  - Insert `<% jsonld_list(products) %>` at the bottom of file.
+  - Insert `<% jsonld_list(products) %>` at the bottom of file. (Notice this helper doesn't generate output)
 
 Make sure you've added your store metadata from the Solidus store administration page, like SEO title, store URL and meta description.
 
