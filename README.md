@@ -58,7 +58,7 @@ At this point, the features you've gained are:
 
 This gem defines some methods in your models to be used as an interface/source of your meta data. It already provides some useful defaults that can be easily extended and customized, all inside your Spree models, via decorators.
 
-You can override any of these **base methods** with your own data source. We recommend you to look at the source (TODO: Add link) to base off your work.
+You can override any of these **base methods** with your own data source. We recommend you to (look at the source)[https://github.com/karmakatahdin/solidus_seo/blob/master/lib/solidus_seo/jsonld/builder/data_methods.rb] to know which properties are available for easy overriding.
 
   - `seo_data` must return a hash with the same structure expected by  [`set_meta_tags`](https://github.com/kpumuk/meta-tags#allowed-options-for-display_meta_tags-and-set_meta_tags-methods)
   - `jsonld_data` must return a hash, holding a [jsonld definition](https://en.wikipedia.org/wiki/JSON-LD).
