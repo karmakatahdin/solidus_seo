@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage  = 'https://github.com/karmakatahdin/solidus_seo'
 
   s.files = Dir["{app,config,db,lib}/**/*", 'LICENSE', 'Rakefile', 'README.md']
-  s.test_files = Dir['test/**/*']
+  s.test_files = Dir['spec/**/*']
 
   s.add_dependency 'solidus_core', ['>= 1.1', '< 3']
   s.add_dependency 'deface'
@@ -24,7 +24,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'image_optim_rails'
   s.add_dependency 'image_optim_pack'
 
+  s.add_development_dependency 'awesome_print'
   s.add_development_dependency 'capybara'
+  s.add_development_dependency 'pry-byebug'
   s.add_development_dependency 'capybara-screenshot'
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'poltergeist'

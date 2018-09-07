@@ -2,6 +2,7 @@
 
 # Run Coverage report
 require 'simplecov'
+
 SimpleCov.start do
   add_filter 'spec/dummy'
   add_group 'Controllers', 'app/controllers'
@@ -21,6 +22,8 @@ require "solidus_support/extension/feature_helper"
 require "solidus_support/extension/rails_helper"
 require "solidus_support/extension/spec_helper"
 
+require 'pry-byebug'
+require 'awesome_print'
 require 'rspec/rails'
 require 'database_cleaner'
 require 'ffaker'
@@ -41,6 +44,7 @@ require 'solidus_seo/factories'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+  config.include TestingHelpers
 
   # Infer an example group's spec type from the file location.
   config.infer_spec_type_from_file_location!
