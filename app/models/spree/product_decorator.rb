@@ -2,7 +2,7 @@ Spree::Product.class_eval do
   include SolidusSeo::Model
 
   def seo_name
-    "#{name} #{master.options_text}".strip
+    name
   end
 
   def seo_url
@@ -39,6 +39,7 @@ Spree::Product.class_eval do
 
   def seo_data
     {
+      title: seo_name,
       description: seo_description,
       name: seo_name,
       image_src: seo_images.first,
@@ -67,7 +68,7 @@ Spree::Product.class_eval do
     {
       "@context": "http://schema.org/",
       "@type": "Product",
-      "name": seo_name,
+      "name": name,
       "url": seo_url,
       "image": seo_images,
       "description": seo_name,
