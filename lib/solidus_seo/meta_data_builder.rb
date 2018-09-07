@@ -25,7 +25,7 @@ module SolidusSeo
     end
 
     def resource_meta_data
-      object = @product
+      object = get_meta_resource
       meta = {}
 
       if object.is_a? ActiveRecord::Base
@@ -42,6 +42,11 @@ module SolidusSeo
       end
 
       meta.deep_symbolize_keys
+    end
+
+    def get_meta_resource
+      # TODO: Expand as needed
+      @product
     end
   end
 end
