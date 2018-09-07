@@ -1,12 +1,17 @@
 Spree::Store.class_eval do
   include SolidusSeo::Model
 
+  # following conventions of other models
+  def seo_name
+    seo_title.presence || name
+  end
+
   def seo_image
     url_helper.image_url(Spree::Config.logo, host: store_host)
   end
 
   def seo_description
-    plain_text(try(:meta_description).presence || try(:description))
+    plain_text(meta_description)
   end
 
   def seo_tagline
@@ -16,7 +21,7 @@ Spree::Store.class_eval do
 
   def seo_data
     {
-      site: seo_title,
+      site: seo_name,
       description: seo_description,
       image_src: seo_image,
       og: {
