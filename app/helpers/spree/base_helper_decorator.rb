@@ -13,11 +13,14 @@ module Spree::BaseHelper
     crumbs
   end
 
-  def taxon_breadcrumbs_with_jsonld(taxon)
+  def taxon_breadcrumbs_with_jsonld(taxon, separator = '&nbsp;&raquo;&nbsp;', list_class = 'list-inline', list_item_class = 'list-inline-item')
     return '' if current_page?('/') || taxon.nil?
 
-    original_output = Nokogiri::HTML::DocumentFragment.parse(taxon_breadcrumbs_without_jsonld(taxon).to_s)
+    separator = tag.span(separator.html_safe, class: 'breadcrumb-separator')
+    original_output = Nokogiri::HTML::DocumentFragment.parse(taxon_breadcrumbs_without_jsonld(taxon, separator, list_class).to_s)
     original_output.xpath('@itemscope|@itemtype|@itemprop|.//@itemscope|.//@itemtype|.//@itemprop').remove
+    original_output.search('.columns').first['class'] = ''
+    original_output.search('li').attr('class', list_item_class)
 
     jsonld_breadcrumbs(breadcrumb_pairs(taxon)) + original_output.to_s.html_safe
   end
