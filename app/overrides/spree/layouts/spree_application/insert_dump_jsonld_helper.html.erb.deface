@@ -1,4 +1,4 @@
 <!--
 insert_bottom "body"
 -->
-<%= dump_jsonld %>
+<%= dump_jsonld if respond_to? :dump_jsonld %>
