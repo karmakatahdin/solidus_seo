@@ -22,15 +22,15 @@ module SolidusSeo
 
         { prop_name.to_sym => prop_data }
       end
-    end
 
-    def merge_prop_data(base_data, new_data)
-      if new_data.respond_to? :reverse_merge # Hash
-        new_data.reverse_merge base_data
-      elsif new_data.respond_to? :map # Array
-        new_data.map { |it| merge_prop_data(base_data, it) }
-      else # Scalar, pass it through
-        new_data
+      def merge_prop_data(base_data, new_data)
+        if new_data.respond_to? :reverse_merge # Hash
+          new_data.reverse_merge base_data
+        elsif new_data.respond_to? :map # Array
+          new_data.map { |it| merge_prop_data(base_data, it) }
+        else # Scalar, pass it through
+          new_data
+        end
       end
     end
   end
