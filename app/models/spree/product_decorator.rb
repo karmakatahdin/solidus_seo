@@ -34,7 +34,7 @@ Spree::Product.class_eval do
   end
 
   def can_supply_any?
-    variants_including_master.any?(&:can_supply?)
+    variants_including_master(&:can_supply).any?
   end
 
   def seo_data
