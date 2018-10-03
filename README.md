@@ -1,6 +1,10 @@
-# SolidusSeo
+# Solidus SEO
 
-Successful stores keep SEO as a top priority. This Solidus extension adds common-sense defaults for structured data, meta tags, Open Graph protocol and image optimization.
+Successful stores keep SEO as a top priority. This Solidus extension adds common-sense defaults for structured data, meta tags, Open Graph protocol, and image optimization.
+
+Please note that we are still striving to improve this extension and we warmly welcome community contribution, engagement, and support.
+
+Let us know what you'd like to see added next; we promise to respond to any issues as soon as possible.
 
 ## Installation
 
@@ -27,19 +31,19 @@ Successful stores keep SEO as a top priority. This Solidus extension adds common
 
 ### Views
 
-We use [Deface](https://github.com/spree/deface) to insert some helpers that generate the meta data. This, of course, only works if you're using/overriding Solidus default views from [solidus_frontend](https://github.com/solidusio/solidus/tree/master/frontend).
+We use [Deface](https://github.com/spree/deface) to insert some helpers that generate the meta and structured data. This, of course, only works if you're using/overriding the default Solidus views from [solidus_frontend](https://github.com/solidusio/solidus/tree/master/frontend).
 
 Otherwise, if you're using custom non-Solidus views, we assume you're smart enough to figure out for yourself where to put these helpers ;)
 
-These are the modifications we do, via deface, in Solidus views as part of the minimal installation:
+Here are the changes we make, via deface, in the default Solidus views as part of the minimal installation:
 
 - In `spree/shared/_head.html.erb`:
-  - Replace `<%== meta_data_tags %>` line for `<%= display_meta_tags %>`.
-  - Remove `<title>` tag (`display_meta_tags` generates the title tag).
+  - Replace the `<%== meta_data_tags %>` line for `<%= display_meta_tags %>`.
+  - Remove the `<title>` tag (`display_meta_tags` generates a new title tag).
 
 
 - In `spree/layouts/spree_application.html.erb`
-  - Insert `<%= dump_jsonld %>` just before the `</body>` closing  tag.
+  - Insert `<%= dump_jsonld %>` just before the `</body>` closing tag.
 
 
 - In `spree/products/show.html.erb`:
@@ -47,21 +51,22 @@ These are the modifications we do, via deface, in Solidus views as part of the m
 
 
 - In `spree/shared/_products.html.erb`:
-  - Insert `<% jsonld_list(products) %>` at the bottom of file. (Notice this helper doesn't generate any output, as instead it simply adds to the data that's later outputted by dump_jsonld)
+  - Insert `<% jsonld_list(products) %>` at the bottom of the file. (Notice this helper doesn't generate any output, as instead it simply adds to the data that's later outputted by dump_jsonld)
 
 At this point, assuming you're using the default Solidus views and this extension's deface overrides, the features you've gained are:
 
-  - Default meta tags including open graph tags, describing a product in the PDP pages and the store/site in all other pages.
+  - Default meta tags including open graph tags, describing a product on the PDP pages, and describing the store/site in all other pages.
   - Store jsonld markup on all your pages.
   - Product jsonld markup in your PDP pages.
   - Breadcrumb jsonld markup in your taxon pages.
   - ItemList jsonld markup in your paginated product pages.
+  - Site-wide default paperclip image optimization (through image_optim)
 
 ### Models
 
 This gem is intended to provide a progressive implementation approach. To begin with, it defines some methods in your models to be used as an interface/source of your meta data. Moreover, it already provides some useful defaults that can be easily extended and customized, all inside your Spree models, via decorators.
 
-Practically speaking, what this means is that simply by setting your store's metadata from the admin and calling the display_meta_tags helper, you'll get basic jsonld included for your store. The output would be as follows:
+Practically speaking, what this means is that simply by setting your store's metadata from the admin and calling the display_meta_tags helper in your layout, you'll get basic jsonld data included for your store. The output would be similar to the following:
 
 ```json
 {
@@ -75,7 +80,7 @@ Practically speaking, what this means is that simply by setting your store's met
 }
 ```
 
-Similarly, with no additional customization, overrides, or decorators, a call to `jsonld @product` will produce the following example output:
+Likewise, with no additional customization, overrides, or decorators, a call to `jsonld @product` will produce the following example output:
 
 ```json
 {
@@ -102,10 +107,12 @@ Beyond this initial behavior, you can override any of these **base methods** wit
 
 The basic requirements for the return values of your methods are straight-forward:
   - `seo_data` must return a hash with the same structure expected by  [`set_meta_tags`](https://github.com/kpumuk/meta-tags#allowed-options-for-display_meta_tags-and-set_meta_tags-methods)
-  and
+
+      and
+
   - `jsonld_data` must return a hash, holding a [jsonld definition](https://en.wikipedia.org/wiki/JSON-LD).
 
-For the purpose of illustration, a simple example could be adding a new file to your Solidus app, `app/models/spree/order_decorator.rb`, to implement jsonld_data for Spree::Order. [The overrite for seo_data would be placed and implemented similarly.]
+For the purpose of illustration, a simple example could be adding a new file to your Solidus app, `app/models/spree/order_decorator.rb`, to implement the jsonld_data interface for `Spree::Order`; the override for the seo_data interface would be placed and implemented similarly. [NOTE: To be clear, this extension provides no default implementation for `Spree::Order.jsonld_data` - the code below is meant solely as an example override for those new to Solidus and who, accordingly, might be unfamiliar with its override mechanics (decorators).]
 
 ```ruby
 # app/models/spree/order_decorator.rb
@@ -141,11 +148,11 @@ Spree::Order.class_eval do
 end
 ```
 
-Beside these methods, there are some model-specific ones that let you provide some common and useful data.
+Besides these base methods, there are some model-specific ones for Spree::Store and Spree::Product which are explained in the following sections. These are intended to provide you with some additional common and useful data.
 
 #### Spree::Store
 
-Again, even without any additional work beyond the initial installation, here is is the base jsonld definition for your Spree::Store model, by default:
+Again, even without any additional work beyond the initial installation, you get a solid/basic jsonld definition for your Spree::Store model. By default:
 
 ```json
 {
@@ -167,8 +174,6 @@ We provide some data-source methods for these common properties without having t
 # app/models/spree/store_decorator.rb
 
 Spree::Store.class_eval do
-  include SolidusSeo::Model
-
   def address_prop
     {
       "streetAddress": "123 Custom Address St",
@@ -314,9 +319,9 @@ And if you're wondering where the `seo_keywords` helper is, well, it doesn't exi
 Beside the [`seo_data` and `jsonld_data` methods](#models), there are also some common convenience methods for this particular model, namely:
   - `seo_name`
   - `seo_url`
-  - `seo_images`: An array of -at least- one absolute image url. Recommendation is to use 3 images, each with one of the following proportions: 1x1, 19:6, 4:3.
-  - `seo_description`: By default, it fallbacks to `meta_description` field or if empty, to `description`.
-  - `seo_brand`: By default, it uses the name of any taxon assigned that belongs to a 'Brands' taxonomy.
+  - `seo_images`: An array of -at least- one absolute image url. The recommendation is to use 3 images, each with one of the following proportions: 1x1, 19:6, 4:3.
+  - `seo_description`: By default, it fallbacks to the `meta_description` field or if empty, to `description`.
+  - `seo_brand`: By default, it uses the name of any assigned taxon that belongs to a 'Brands' taxonomy.
   - `seo_currency`
   - `seo_price`
 
