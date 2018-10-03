@@ -33,8 +33,14 @@ Spree::Product.class_eval do
     master.default_price.amount
   end
 
-  def can_supply_any?
-    variants_including_master.any?(&:can_supply?)
+  def any_in_stock?
+    return variants_including_master.any? unless Spree::Config.track_inventory_levels
+    arel_conditions = [
+      variants_including_master.arel_table[:track_inventory].eq(false),
+      Spree::StockItem.arel_table[:count_on_hand].gt(0)
+    ]
+    in_stock_variants = variants_including_master.joins(:stock_items).where(arel_conditions.inject(:or))
+    in_stock_variants.any?
   end
 
   def seo_data
@@ -85,7 +91,7 @@ Spree::Product.class_eval do
         "priceCurrency": seo_currency,
         "price": seo_price,
         "itemCondition": "http://schema.org/NewCondition",
-        "availability": "http://schema.org/#{ can_supply_any? ? 'InStock' : 'OutOfStock'}",
+        "availability": "http://schema.org/#{ any_in_stock? ? 'InStock' : 'OutOfStock'}",
       }
     }
   end
