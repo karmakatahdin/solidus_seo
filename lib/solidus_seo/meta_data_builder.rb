@@ -36,15 +36,12 @@ module SolidusSeo
           meta_columns.each do |meta_column|
             base_column_name = meta_column.gsub 'meta_', ''
             # with fallback: meta_description or description
-            column_data = object.try(meta_column).presence || object.try(base_column_name).presence
-            if column_data
-              meta[base_column_name] = column_data
-            end
+            meta[base_column_name] = object.try(meta_column).presence || object.try(base_column_name).presence
           end
         end
       end
 
-      meta.deep_symbolize_keys
+      meta.compact.deep_symbolize_keys
     end
 
     def get_meta_resource
