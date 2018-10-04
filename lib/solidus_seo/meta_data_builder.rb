@@ -46,7 +46,7 @@ module SolidusSeo
 
     def get_meta_resource
       # TODO: Expand as needed
-      @product
+      @product || @taxon
     end
   end
 end
