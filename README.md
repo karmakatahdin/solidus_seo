@@ -148,6 +148,14 @@ Spree::Order.class_eval do
 end
 ```
 
+After adding the new decorator, all that's left is to add a call to jsonld on the object within your view, such as:
+
+```erb
+<%= jsonld(@order) %>
+```
+
+[In short, `jsonld` is a helper that parses any object that implements the `to_jsonld` method (added by `SolidusSeo::Model` module), which in turn makes use of the `jsonld_data` method, and returns a script tag.]
+
 Besides these base methods, there are some model-specific ones for Spree::Store and Spree::Product which are explained in the following sections. These are intended to provide you with some additional common and useful data.
 
 #### Spree::Store
