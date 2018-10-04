@@ -2,7 +2,7 @@ Spree::Product.class_eval do
   include SolidusSeo::Model
 
   def seo_name
-    name
+    plain_text(try(:meta_title).presence) || name
   end
 
   def seo_url
