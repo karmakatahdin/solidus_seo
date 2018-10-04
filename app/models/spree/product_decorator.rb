@@ -2,7 +2,7 @@ Spree::Product.class_eval do
   include SolidusSeo::Model
 
   def seo_name
-    name
+    plain_text(try(:meta_title).presence) || name
   end
 
   def seo_url
@@ -22,7 +22,7 @@ Spree::Product.class_eval do
   end
 
   def seo_brand
-    @brand ||= taxons.detect { |it| it.root.name.downcase == 'brands' }.try(:name)
+    @brand ||= taxons.detect { |it| it.root.name =~ /^brands?$/i }.try(:name)
   end
 
   def seo_currency

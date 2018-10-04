@@ -41,12 +41,12 @@ module SolidusSeo
         end
       end
 
-      meta.deep_symbolize_keys
+      meta.compact.deep_symbolize_keys
     end
 
     def get_meta_resource
       # TODO: Expand as needed
-      @product
+      @product || @taxon
     end
   end
 end
