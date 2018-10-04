@@ -36,7 +36,10 @@ module SolidusSeo
           meta_columns.each do |meta_column|
             base_column_name = meta_column.gsub 'meta_', ''
             # with fallback: meta_description or description
-            meta[base_column_name] = object.try(meta_column).presence || object.try(base_column_name).presence
+            column_data = object.try(meta_column).presence || object.try(base_column_name).presence
+            if column_data
+              meta[base_column_name] = column_data
+            end
           end
         end
       end
