@@ -329,7 +329,7 @@ Beside the [`seo_data` and `jsonld_data` methods](#models), there are also some 
   - `seo_url`
   - `seo_images`: An array of -at least- one absolute image url. The recommendation is to use 3 images, each with one of the following proportions: 1x1, 19:6, 4:3.
   - `seo_description`: By default, it fallbacks to the `meta_description` field or if empty, to `description`.
-  - `seo_brand`: By default, it uses the name of any assigned taxon that belongs to a 'Brands' taxonomy.
+  - `seo_brand`: By default, it uses the name of any assigned taxon that belongs to a taxonomy named 'Brand' or 'Brands'.
   - `seo_currency`
   - `seo_price`
 

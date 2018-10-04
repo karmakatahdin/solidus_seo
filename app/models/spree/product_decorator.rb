@@ -22,7 +22,7 @@ Spree::Product.class_eval do
   end
 
   def seo_brand
-    @brand ||= taxons.detect { |it| it.root.name.downcase == 'brands' }.try(:name)
+    @brand ||= taxons.detect { |it| it.root.name.downcase == 'brands' || it.root.name.downcase == 'brand' }.try(:name)
   end
 
   def seo_currency
