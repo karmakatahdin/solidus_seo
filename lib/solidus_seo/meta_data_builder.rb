@@ -32,7 +32,7 @@ module SolidusSeo
         if object.respond_to? :to_seo
           meta = object.to_seo
         else
-          meta_columns = object.class.column_names.keep_if { |col_name| col_name.starts_with? 'meta_' }
+          meta_columns = object.class.column_names.select { |col_name| col_name.starts_with? 'meta_' }
           meta_columns.each do |meta_column|
             base_column_name = meta_column.gsub 'meta_', ''
             # with fallback: meta_description or description
