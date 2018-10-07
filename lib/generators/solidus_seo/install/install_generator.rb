@@ -15,9 +15,17 @@ module SolidusSeo
 
       def install_overrides
         if ENV["RAILS_ENV"] == "test"
-          overrides_choice == "y"
+          overrides_choice = "y"
         else
           overrides_choice = ask("Do you want to install the solidus_seo deface overrides into your app?", limited_to: ["y", "n"])
+          say("****************************************************************")
+          say("**************INSTALL NOTE**************************************")
+          say("****************************************************************")
+          say("Since you've chosen to add the solidus_seo deface overrides,")
+          say("please make sure you've included 'gem deface' in your Gemfile")
+          say("(if it is not already a dependency of your solidus application).")
+          say("See README for more details.")
+          say("****************************************************************")
         end
         if (overrides_choice == "y")
           copy_file 'insert_dump_jsonld_helper.html.erb.deface', 'app/overrides/spree/layouts/spree_application/insert_dump_jsonld_helper.html.erb.deface'
