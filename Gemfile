@@ -18,4 +18,8 @@ end
 gem 'mysql2'
 gem 'pg'
 
+group :test do
+  gem 'deface'
+end
+
 gemspec

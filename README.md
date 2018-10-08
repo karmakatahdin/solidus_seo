@@ -14,7 +14,9 @@ Let us know what you'd like to see added next; we promise to respond to any issu
     gem 'solidus_seo'
     ```
 
-2. Bundle your dependencies and run the installation generator:
+2. Bundle your dependencies and run the installation generator):
+
+    NOTE: *During this step, you will be prompted to decide whether or not you'd like to generate the overrides that are included in solidus_seo. These overrides require 'deface' and are intended to be used with solidus_frontend. If you are not using solidus_frontend, you'll have to figure out where is best to manually insert the solidus_seo helpers into your custom views. Continue reading for more information.*
 
     ```shell
     bundle
@@ -31,7 +33,7 @@ Let us know what you'd like to see added next; we promise to respond to any issu
 
 ### Views
 
-We use [Deface](https://github.com/spree/deface) to insert some helpers that generate the meta and structured data. This, of course, only works if you're using/overriding the default Solidus views from [solidus_frontend](https://github.com/solidusio/solidus/tree/master/frontend).
+As mentioned in the above section, we use [Deface](https://github.com/spree/deface) to insert some helpers that generate the meta and structured data. This, of course, only works if you're using/overriding the default Solidus views from [solidus_frontend](https://github.com/solidusio/solidus/tree/master/frontend).
 
 Otherwise, if you're using custom non-Solidus views, we assume you're smart enough to figure out for yourself where to put these helpers ;)
 
@@ -148,7 +150,7 @@ Spree::Order.class_eval do
 end
 ```
 
-After adding the new decorator, all that's left is to add a call to jsonld on the object within your view, such as:
+After adding the new decorator, all that's left would be adding a call to jsonld on the object within your view, such as:
 
 ```erb
 <%= jsonld(@order) %>
