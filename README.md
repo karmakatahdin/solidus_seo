@@ -16,7 +16,7 @@ Let us know what you'd like to see added next; we promise to respond to any issu
 
 2. Bundle your dependencies and run the installation generator):
 
-    NOTE: *During this step, you will be prompted to decide whether or not you'd like to generate the overrides that are included in solidus_seo. These overrides require 'deface' and are intended to be used with solidus_frontend. If you are not using solidus_frontend, you'll have to figure out where is best to manually insert the solidus_seo helps into your custom views. Continue reading below.*
+    NOTE: *During this step, you will be prompted to decide whether or not you'd like to generate the overrides that are included in solidus_seo. These overrides require 'deface' and are intended to be used with solidus_frontend. If you are not using solidus_frontend, you'll have to figure out where is best to manually insert the solidus_seo helpers into your custom views. Continue reading for more information.*
 
     ```shell
     bundle
