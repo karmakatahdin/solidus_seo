@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Enhanced SEO in Solidus'
   s.description = 'Enhanced SEO in Solidus'
   s.license     = 'BSD-3-Clause'
+  s.required_ruby_version = '>= 2.3.4'
 
   s.author    = 'Karma Creative'
   s.email     = 'karma@karmacreative.io'
@@ -16,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", 'LICENSE', 'Rakefile', 'README.md']
   s.test_files = Dir['spec/**/*']
 
-  s.add_dependency 'solidus_core', ['>= 1.1', '< 3']
+  s.add_dependency 'solidus_core', ['>= 1.4', '< 3']
   s.add_dependency 'solidus_support'
   s.add_dependency 'meta-tags'
   s.add_dependency 'paperclip-optimizer'
