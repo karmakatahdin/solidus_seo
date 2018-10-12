@@ -73,7 +73,7 @@ Practically speaking, what this means is that simply by setting your store's met
 ```json
 {
   "@context": "http://schema.org",
-  "@type": "Organization",
+  "@type": "Store",
   "name": "Your Store Name",
   "logo": "https://yourstore.com/store_logo.jpg",
   "image": "https://yourstore.com/store_logo.jpg",
@@ -167,7 +167,7 @@ Again, even without any additional work beyond the initial installation, you get
 ```json
 {
   "@context": "http://schema.org",
-  "@type": "Organization",
+  "@type": "Store",
   "name": "Your Store Name",
   "logo": "https://yourstore.com/store_logo.jpg",
   "image": "https://yourstore.com/store_logo.jpg",
@@ -275,7 +275,7 @@ Using the sample data above, the final output would look like this :
 ```json
 {
   "@context": "http://schema.org",
-  "@type": "Organization",
+  "@type": "Store",
   "name": "Your Store Name",
   "logo": "https://yourstore.com/store_logo.jpg",
   "image": "https://yourstore.com/store_logo.jpg",

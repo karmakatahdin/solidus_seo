@@ -42,7 +42,7 @@ Spree::Store.class_eval do
   def jsonld_data
     base = {
       "@context": "http://schema.org",
-      "@type": "Organization",
+      "@type": "Store",
       "name": name,
       "logo": seo_image,
       "image": seo_image,

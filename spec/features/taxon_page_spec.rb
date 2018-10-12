@@ -22,9 +22,9 @@ describe "Taxon page", type: :feature do
 
 
   context 'jsonld markup output' do
-    it "contains organization" do
+    it "contains 'Store' entity type" do
       subject
-      expect(page).to have_text :all, %{"@type": "Organization"}
+      expect(page).to have_text :all, %{"@type": "Store"}
     end
 
     it "contains breadcrumb list" do
