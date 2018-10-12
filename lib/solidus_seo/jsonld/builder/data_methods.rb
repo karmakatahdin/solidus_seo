@@ -59,7 +59,7 @@ module SolidusSeo
         end
 
         def same_as_prop
-          # See https://schema.org/SameAs for details and examples
+          # See https://schema.org/sameAs for details and examples
           # [
           #   'https://facebook.com/mystore',
           #   'https://twitter.com/mystore',
