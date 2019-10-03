@@ -18,15 +18,16 @@ ENV['RAILS_ENV'] = 'test'
 
 require File.expand_path('dummy/config/environment.rb', __dir__)
 
-require "solidus_support/extension/feature_helper"
-require "solidus_support/extension/rails_helper"
-require "solidus_support/extension/spec_helper"
-
 require 'pry-byebug'
 require 'awesome_print'
 require 'rspec/rails'
 require 'database_cleaner'
 require 'ffaker'
+require 'factory_bot'
+
+require "solidus_support/extension/feature_helper"
+require "solidus_support/extension/rails_helper"
+require "solidus_support/extension/spec_helper"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

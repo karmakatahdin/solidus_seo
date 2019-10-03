@@ -4,7 +4,6 @@ module TestingHelpers
 
     target.tap do |it|
       atts.each do |(attr, v)|
-        # puts "-----> #{it} : #{attr}=#{v}"
         allow_any_instance_of(it.class).to receive(attr.to_sym) { v }
       end
     end
