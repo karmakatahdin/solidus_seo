@@ -6,14 +6,14 @@ Spree::Product.class_eval do
   end
 
   def seo_url
-    spree_route_helper.product_url(self, host: store_host)
+    spree_route_helper.product_url(self, host: full_store_url)
   end
 
   def seo_images
     return [] unless display_image.attachment.file?
 
     [
-      url_helper.image_url(display_image.attachment.url(:large), host: store_host),
+      image_url(display_image.attachment.url(:large)),
     ].compact
   end
 

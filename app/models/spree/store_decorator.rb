@@ -6,8 +6,12 @@ Spree::Store.class_eval do
     seo_title.presence || name
   end
 
+  def seo_url
+    full_store_url
+  end
+
   def seo_image
-    url_helper.image_url(Spree::Config.logo, host: store_host)
+    image_url(Spree::Config.logo)
   end
 
   def seo_description
@@ -46,8 +50,8 @@ Spree::Store.class_eval do
       "name": name,
       "logo": seo_image,
       "image": seo_image,
-      "url": store_host,
-      "@id": store_host
+      "url": seo_url,
+      "@id": seo_url
     }
 
     build_jsonld_with base, :contact_points,
