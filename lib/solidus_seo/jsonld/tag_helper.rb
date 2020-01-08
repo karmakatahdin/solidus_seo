@@ -1,3 +1,7 @@
+require_relative 'base'
+require_relative 'breadcrumbs'
+require_relative 'list'
+
 module SolidusSeo
   module Jsonld
     module TagHelper
