@@ -45,6 +45,7 @@ Here are the changes we make, via deface, in the default Solidus views as part o
 
 
 - In `spree/layouts/spree_application.html.erb`
+  - Insert `<%= render 'solidus_seo/analytics' %>` just before `</head>`.
   - Insert `<%= dump_jsonld %>` just before the `</body>` closing tag.
 
 
@@ -63,6 +64,7 @@ At this point, assuming you're using the default Solidus views and this extensio
   - Breadcrumb jsonld markup in your taxon pages.
   - ItemList jsonld markup in your paginated product pages.
   - Site-wide default paperclip image optimization (through image_optim)
+  - Google Analytics/Tag Manager page views + ecommerce integrations via presence of `GOOGLE_TAG_MANAGER_ID` and `GOOGLE_ANALYTICS_ID` environment variables, respectively (only one integration should be enabled at a time).
 
 ### Models
 

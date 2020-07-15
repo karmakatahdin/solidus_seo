@@ -33,6 +33,7 @@ module SolidusSeo
           copy_file 'insert_display_meta_tags_helper.html.erb.deface', 'app/overrides/spree/shared/_head/insert_display_meta_tags_helper.html.erb.deface'
           copy_file 'remove_original_title_tag.deface', 'app/overrides/spree/shared/_head/remove_original_title_tag.deface'
           copy_file 'insert_product_list_helper.html.erb.deface', 'app/overrides/spree/shared/_products/insert_product_list_helper.html.erb.deface'
+          copy_file 'insert_analytics_in_layout.html.erb.deface', 'app/overrides/spree/layouts/spree_application/insert_analytics_in_layout.html.erb.deface'
         end
       end
     end
