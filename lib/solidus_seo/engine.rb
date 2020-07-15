@@ -20,6 +20,10 @@ module SolidusSeo
       end
     end
 
+    initializer "solidus_seo.view_helpers" do
+      ActiveSupport.on_load(:action_view) { ActionView::Base.send :include, Jsonld::TagHelper }
+    end
+
     config.before_initialize do
     end
 

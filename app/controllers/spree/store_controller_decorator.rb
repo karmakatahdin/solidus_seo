@@ -1,4 +1,4 @@
 Spree::StoreController.class_eval do
-  include SolidusSeo::MetaDataBuilder
-  helper SolidusSeo::Jsonld::TagHelper
+  include ::SolidusSeo::MetaDataBuilder
 end
+
