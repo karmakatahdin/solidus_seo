@@ -1,26 +1,29 @@
 require 'spec_helper'
 
 describe "Product page", type: :feature do
-  let!(:store) { add_stubs :store, seo_name: store_seo_name }
+  let!(:store) { Spree::Store.default }
   let(:store_seo_name) { 'My store SEO name' }
 
   let!(:taxon) { create(:taxon, name: 'MyTaxon') }
 
   let!(:product) do
-    base_product = create(:base_product, taxons: [taxon])
-    add_stubs base_product, seo_name: seo_name,
-                            seo_description: seo_description,
-                            seo_price: seo_price,
-                            seo_images: [seo_image]
+    create(:base_product, taxons: [taxon])
   end
+
   let(:seo_image) { 'https://example.com/path/product.jpg' }
   let(:seo_name) { 'My product SEO name' }
   let(:seo_description) { 'My product SEO description' }
   let(:seo_price) { "10.00" }
 
   before(:each) do
-    create(:variant, product: product)
-    create(:variant, product: product)
+    add_stubs(Spree::StoreDecorator, seo_name: store_seo_name)
+    add_stubs(
+      Spree::ProductDecorator,
+      seo_name: seo_name,
+      seo_description: seo_description,
+      seo_price: seo_price,
+      seo_images: [seo_image]
+    )
   end
 
   subject { visit spree.product_path(product) }

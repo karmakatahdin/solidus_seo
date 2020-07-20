@@ -1,5 +1,10 @@
+require_dependency 'spree/base_helper_decorator'
+require_dependency 'solidus_seo/helpers/base_helper'
+
 module SolidusSeo
   module MetaDataBuilder
+    extend ActiveSupport::Concern
+
     include Spree::BaseHelper
     include SolidusSeo::Helpers::BaseHelper
 

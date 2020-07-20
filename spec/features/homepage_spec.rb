@@ -1,17 +1,21 @@
 require 'spec_helper'
 
 describe "Homepage", type: :feature do
-  let!(:store) do
-    add_stubs :store, seo_name: seo_name,
-                      seo_image: seo_image,
-                      seo_description: seo_description
-  end
+  let!(:store) { Spree::Store.default }
   let(:seo_name) { 'My store SEO name' }
   let(:seo_image) { 'https://example.com/path/store.jpg' }
   let(:seo_description) { 'My store SEO description' }
+  let(:seo_tagline) { 'This is a tagline' }
 
   before :each do
-    allow(store).to receive(:seo_image) { seo_image }
+    add_stubs(
+      Spree::StoreDecorator,
+      name: 'My Store',
+      seo_name: seo_name,
+      seo_image: seo_image,
+      seo_description: seo_description,
+      seo_tagline: seo_tagline
+    )
   end
 
   subject { visit spree.root_path }

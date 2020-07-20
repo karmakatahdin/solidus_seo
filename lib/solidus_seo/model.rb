@@ -1,3 +1,7 @@
+require_dependency 'solidus_seo/helpers/base_helper'
+require_dependency 'solidus_seo/helpers/url_helper'
+require_dependency 'solidus_seo/jsonld'
+
 module SolidusSeo
   module Model
     include SolidusSeo::Helpers::BaseHelper
