@@ -25,9 +25,9 @@ require 'database_cleaner'
 require 'ffaker'
 require 'factory_bot'
 
-require "solidus_support/extension/feature_helper"
-require "solidus_support/extension/rails_helper"
-require "solidus_support/extension/spec_helper"
+require "solidus_dev_support/rspec/feature_helper"
+require "solidus_dev_support/rspec/rails_helper"
+require "solidus_dev_support/rspec/spec_helper"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -41,7 +41,7 @@ require 'spree/testing_support/factories'
 require 'spree/testing_support/url_helpers'
 
 # Requires factories defined in lib/solidus_seo/factories.rb
-require 'solidus_seo/factories'
+require_dependency 'solidus_seo/factories'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
