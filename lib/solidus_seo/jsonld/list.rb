@@ -1,3 +1,5 @@
+require_dependency 'solidus_seo/jsonld/base'
+
 module SolidusSeo
   module Jsonld
     class List < Base

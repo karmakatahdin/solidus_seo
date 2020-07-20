@@ -1,3 +1,5 @@
+require_dependency 'solidus_seo/jsonld/list'
+
 module SolidusSeo
   module Jsonld
     class Breadcrumbs < List

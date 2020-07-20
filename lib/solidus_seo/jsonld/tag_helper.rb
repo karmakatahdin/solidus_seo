@@ -1,6 +1,6 @@
-require_relative 'base'
-require_relative 'breadcrumbs'
-require_relative 'list'
+require_dependency 'solidus_seo/jsonld/base'
+require_dependency 'solidus_seo/jsonld/breadcrumbs'
+require_dependency 'solidus_seo/jsonld/list'
 
 module SolidusSeo
   module Jsonld
@@ -48,7 +48,7 @@ module SolidusSeo
         jsonld_cache_key = [:jsonld, items, *opts.values].compact
 
         Rails.cache.fetch(jsonld_cache_key, force: force) do
-          jsonld_builder_class = "SolidusSeo::Jsonld::#{type.to_s.titleize}".constantize
+          jsonld_builder_class = "::SolidusSeo::Jsonld::#{type.to_s.titleize}".constantize
           jsonld_builder_class.new(items).print(opts)
         end
       end

@@ -1,3 +1,6 @@
+require_dependency 'solidus_seo/jsonld/builder/data_methods'
+require_dependency 'solidus_seo/jsonld/builder/builder_methods'
+
 module SolidusSeo
   module Jsonld
     module Builder
