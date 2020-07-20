@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'solidus_core', ['>= 1.4', '< 3']
   s.add_dependency 'solidus_support'
+  s.add_dependency 'solidus_dev_support'
   s.add_dependency 'meta-tags'
   s.add_dependency 'paperclip-optimizer'
   s.add_dependency 'image_optim_rails'
