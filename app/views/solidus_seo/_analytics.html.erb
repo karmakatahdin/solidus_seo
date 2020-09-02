@@ -1,6 +1,4 @@
-<%
-if ENV.values_at('GOOGLE_TAG_MANAGER_ID', 'GOOGLE_ANALYTICS_ID').any? &&
-  @order && order_just_completed?(@order)
+<% if ENV.values_at('GOOGLE_TAG_MANAGER_ID', 'GOOGLE_ANALYTICS_ID').any? && @order && order_just_completed?(@order)
 
   shared_order_data = {
       affiliation: current_store.name,
@@ -21,54 +19,56 @@ if ENV.values_at('GOOGLE_TAG_MANAGER_ID', 'GOOGLE_ANALYTICS_ID').any? &&
           quantity: line_item.quantity,
       }
   end.compact
-end
 
-if ENV['GOOGLE_TAG_MANAGER_ID'].present?
-%>
-<script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','<%= ENV['GOOGLE_TAG_MANAGER_ID'] %>');
+end %>
 
-    window.dataLayer = window.dataLayer || [];
+<% if ENV['GOOGLE_TAG_MANAGER_ID'].present? %>
 
-    <% if @order && order_just_completed?(@order) %>
-        let purchaseData = Object.assign({}, <%= raw shared_order_data.json %>, {
-            'transaction_id': '<%= @order.number %>',
-            'value': '<%= @order.total %>',
-            'items': <%= raw purchased_items.to_json %>
-        });
+  <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','<%= ENV['GOOGLE_TAG_MANAGER_ID'] %>');
 
-        gtag('event', 'purchase', purchaseData);
-    <% end %>
-</script>
+      window.dataLayer = window.dataLayer || [];
+
+      <% if @order && order_just_completed?(@order) %>
+          let purchaseData = Object.assign({}, <%= raw shared_order_data.to_json %>, {
+              'transaction_id': '<%= @order.number %>',
+              'value': '<%= @order.total %>',
+              'items': <%= raw purchased_items.to_json %>
+          });
+
+          gtag('event', 'purchase', purchaseData);
+      <% end %>
+  </script>
 
 <% elsif ENV['GOOGLE_ANALYTICS_ID'].present? %>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GOOGLE_ANALYTICS_ID'] %>"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '<%= ENV['GOOGLE_ANALYTICS_ID'] %>');
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GOOGLE_ANALYTICS_ID'] %>"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<%= ENV['GOOGLE_ANALYTICS_ID'] %>');
 
-    <% if @order && order_just_completed?(@order) %>
-        let orderData = Object.assign({}, <%= raw shared_order_data.to_json %>, {
-            'id': '<%= j @order.number %>', // Transaction ID. Required for purchases and refunds.
-            'revenue': '<%= @order.total %>', // Total transaction value (incl. tax and shipping)
-            'coupon': '' // TODO: Add coupon code if present
-        });
+      <% if @order && order_just_completed?(@order) %>
+          let orderData = Object.assign({}, <%= raw shared_order_data.to_json %>, {
+              'id': '<%= j @order.number %>', // Transaction ID. Required for purchases and refunds.
+              'revenue': '<%= @order.total %>', // Total transaction value (incl. tax and shipping)
+              'coupon': '' // TODO: Add coupon code if present
+          });
 
-        window.dataLayer.push({
-            'ecommerce': {
-                'purchase': {
-                    'actionField': orderData,
-                    'products': <%= raw purchased_items.to_json %>
-                }
-            }
-        });
-    <% end %>
-</script>
+          window.dataLayer.push({
+              'ecommerce': {
+                  'purchase': {
+                      'actionField': orderData,
+                      'products': <%= raw purchased_items.to_json %>
+                  }
+              }
+          });
+      <% end %>
+  </script>
+
 <% end %>
