@@ -1,6 +1,6 @@
 <%
 just_purchased = @order && order_just_completed?(@order)
-if ENV.values_at('GOOGLE_TAG_MANAGER_ID', 'GOOGLE_ANALYTICS_ID', 'FACEBOOK_PIXEL_ID').any? \
+if ENV.values_at('GOOGLE_TAG_MANAGER_ID', 'GOOGLE_ANALYTICS_ID', 'FACEBOOK_PIXEL_ID', 'PINTEREST_TAG_ID').any? \
    && just_purchased
 
   shared_order_data = {
@@ -36,7 +36,7 @@ end %>
 
 <% if ENV['GOOGLE_TAG_MANAGER_ID'].present? %>
 
-<script data-tag="google-tag-manager">
+<script type="text/javascript" data-tag="google-tag-manager">
     window.dataLayer = window.dataLayer || [];
 
     <% if just_purchased %>
@@ -67,7 +67,7 @@ end %>
 <% elsif ENV['GOOGLE_ANALYTICS_ID'].present? %>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GOOGLE_ANALYTICS_ID'] %>"></script>
-<script data-tag="google-analytics">
+<script type="text/javascript" data-tag="google-analytics">
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
@@ -87,7 +87,7 @@ end %>
 <% end %>
 
 <% if ENV['FACEBOOK_PIXEL_ID'].present? %>
-<script data-tag="facebook">
+<script type="text/javascript" data-tag="facebook">
     !function(f,b,e,v,n,t,s) {
         if (f.fbq) return;
         n = f.fbq = function() { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
@@ -100,12 +100,12 @@ end %>
     fbq('track', 'PageView');
 
     <% if just_purchased %>
-        <% purchased_items.map! { |li| { id: li['sku'], quantity: li['quantity'] } } %>
+        <% items = purchased_items.map { |li| li.slice(:id, :quantity) } %>
 
         fbq('track', 'Purchase', {
             value: <%= @order.total %>,
             currency: 'USD',
-            contents: <%= raw purchased_items.to_json %>,
+            contents: <%= raw items.to_json %>,
             content_type: 'product',
 
             // custom properties
@@ -121,4 +121,39 @@ end %>
 <noscript>
     <img height="1" width="1" src="https://www.facebook.com/tr?id=<%= ENV['FACEBOOK_PIXEL_ID'] %>&ev=PageView&noscript=1" />
 </noscript>
+<% end %>
+
+<% if ENV['PINTEREST_TAG_ID'].present? %>
+<script type="text/javascript" data-tag="pinterest">
+    !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(
+    Array.prototype.slice.call(arguments))};var
+    n=window.pintrk;n.queue=[],n.version="3.0";var
+    t=document.createElement("script");t.async=!0,t.src=e;var
+    r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+    pintrk('load', '<%= ENV['PINTEREST_TAG_ID'] %>');
+    pintrk('page');
+
+    <% if just_purchased %>
+        <% items = purchased_items.map do |li|
+            {
+              product_id: li[:id],
+              product_name: li[:name],
+              product_quantity: li[:quantity],
+              product_price: li[:price],
+            }
+          end %>
+
+        pintrk('track', 'checkout', {
+            value: <%= @order.total %>,
+            order_quantity: <%= @order.line_items.sum(&:quantity) %>,
+            currency: 'USD',
+            line_items: <%= raw items.to_json %>
+        });
+
+        window.solidusSeoListener('pinterest', 'purchase');
+    <% end %>
+ </script>
+ <noscript>
+   <img height="1" width="1" style="display:none;" alt="" src="https://ct.pinterest.com/v3/?tid=<%= ENV['PINTEREST_TAG_ID'] %>&event=init&noscript=1" />
+ </noscript>
 <% end %>
