@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe "Product page", type: :feature do
+describe "Product page", type: :system do
   let!(:store) { Spree::Store.default }
   let(:store_seo_name) { 'My store SEO name' }
 
