@@ -64,7 +64,7 @@ At this point, assuming you're using the default Solidus views and this extensio
   - Breadcrumb jsonld markup in your taxon pages.
   - ItemList jsonld markup in your paginated product pages.
   - Site-wide default paperclip image optimization (through image_optim)
-  - Google Analytics/Tag Manager page views + ecommerce integrations via presence of `GOOGLE_TAG_MANAGER_ID` and `GOOGLE_ANALYTICS_ID` environment variables, respectively (only one integration should be enabled at a time).
+  - Page view and eCommerce conversion tracking (completed checkouts) enabled via presence of `GOOGLE_TAG_MANAGER_ID`, `GOOGLE_ANALYTICS_ID`, `FACEBOOK_PIXEL_ID`, `PINTEREST_TAG_ID` environment variables, respectively (only one Google integration should be enabled at a time).
 
 ### Models
 
