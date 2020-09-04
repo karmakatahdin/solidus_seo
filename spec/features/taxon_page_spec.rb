@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe "Taxon page", type: :feature do
+describe "Taxon page", type: :system do
   let!(:store) { Spree::Store.default }
   let(:seo_name) { 'My store SEO name' }
   let(:seo_image) { 'https://example.com/path/store.jpg' }

@@ -9,4 +9,14 @@ module TestingHelpers
       end
     end
   end
+
+  def checkout_stubs(order, user = nil)
+    user ||= order.user
+    allow_any_instance_of(Spree::CheckoutController).to receive_messages(current_order: order)
+
+    if user
+      allow_any_instance_of(Spree::CheckoutController).to receive_messages(try_spree_current_user: user)
+      allow_any_instance_of(Spree::OrdersController).to receive_messages(try_spree_current_user: user)
+    end
+  end
 end
