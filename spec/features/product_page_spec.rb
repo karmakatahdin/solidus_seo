@@ -26,7 +26,6 @@ describe "Product page", type: :system do
 
   subject { visit spree.product_path(product) }
 
-
   context 'jsonld markup output' do
     it "contains 'Store' entity type" do
       subject
@@ -90,6 +89,23 @@ describe "Product page", type: :system do
     it 'contain product price' do
       subject
       expect(page).to have_css "meta[property='product:price:amount'][content='#{seo_price}']", visible: false
+    end
+  end
+
+  context 'analytics event tracking' do
+    before do
+      stub_const 'ENV', ENV.to_h.merge(env_variable => 'XXX-YYYYY')
+    end
+
+    context 'when PINTEREST_TAG_ID environment variable is present' do
+      let(:env_variable) { 'PINTEREST_TAG_ID' }
+
+      it 'tracks "pagevisit" event with product data' do
+        subject
+        expect(page).to track_analytics_event :pinterest, 'pagevisit', [
+          'track', 'pagevisit', product.name, product.master.sku
+        ]
+      end
     end
   end
 end

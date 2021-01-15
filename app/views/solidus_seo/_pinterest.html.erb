@@ -67,6 +67,7 @@ end
     pintrk('page');
 
     pintrk('track', 'pagevisit'<%== product_data.present? ? ", #{product_data.to_json}" : '' %>);
+    window.solidusSeoDataLayer('pinterest', 'pagevisit');
 
     <% if add_to_cart_data.present? %>
         pintrk('track', 'addtocart', <%== add_to_cart_data.to_json %>);
