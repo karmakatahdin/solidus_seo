@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require_dependency 'solidus_seo/jsonld/tag_helper'
+require_dependency 'solidus_seo/helpers/base_helper'
 
 module SolidusSeo
   class Engine < Rails::Engine
@@ -21,6 +22,7 @@ module SolidusSeo
     initializer "solidus_seo.view_helpers" do
       ActiveSupport.on_load(:action_view) do
         ActionView::Base.send :include, ::SolidusSeo::Jsonld::TagHelper
+        ActionView::Base.send :include, ::SolidusSeo::Helpers::BaseHelper
       end
     end
 
