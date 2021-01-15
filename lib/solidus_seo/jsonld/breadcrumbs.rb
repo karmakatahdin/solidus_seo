@@ -2,7 +2,7 @@ require_dependency 'solidus_seo/jsonld/list'
 
 module SolidusSeo
   module Jsonld
-    class Breadcrumbs < List
+    class Breadcrumbs < SolidusSeo::Jsonld::List
       private
 
       def list_type
