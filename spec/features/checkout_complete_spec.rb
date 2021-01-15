@@ -18,8 +18,7 @@ describe "Checkout complete", type: :system do
 
     it 'includes and executes a purchase event script' do
       subject
-
-      expect(page).to matcher_for 'google-tag-manager', [order.number, order.total, 'ecommerce', 'purchase', line_item.sku, line_item.total]
+      expect(page).to matcher_for 'google-tag-manager', ['ecommerce', 'purchase', order.number, order.total, line_item.sku]
     end
   end
 
@@ -28,7 +27,11 @@ describe "Checkout complete", type: :system do
 
     it 'includes and executes a purchase event script' do
       subject
-      expect(page).to matcher_for 'google-analytics', ['transaction_id', order.number, order.total, line_item.sku, line_item.total, 'event', 'purchase']
+      expect(page).to matcher_for 'google-analytics', [
+        'event', 'purchase', 'transaction_id', order.number,
+        order.total, line_item.sku, line_item.variant.name,
+        line_item.price, line_item.variant.options_text
+      ]
     end
   end
 
