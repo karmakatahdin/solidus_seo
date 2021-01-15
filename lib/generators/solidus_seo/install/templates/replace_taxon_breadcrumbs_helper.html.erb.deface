@@ -1,0 +1,5 @@
+<!--
+replace %{erb[loud]:contains("taxon_breadcrumbs")}
+original "<%= taxon_breadcrumbs(@taxon) %>"
+-->
+<%= taxon_breadcrumbs_jsonld(@taxon) %>
