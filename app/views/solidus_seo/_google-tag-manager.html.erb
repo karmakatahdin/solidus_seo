@@ -1,0 +1,50 @@
+<%
+return if ENV['GOOGLE_ANALYTICS_ID'].present? || ENV['GOOGLE_TAG_MANAGER_ID'].blank?
+
+if just_purchased
+    order_data = {
+        id: order.number,
+        revenue: order.total,
+        coupon: '', # TODO: Add coupon code if present
+
+        affiliation: current_store.name,
+        currency: order.currency,
+        tax: order.tax_total,
+        shipping: order.ship_total
+    }
+
+    purchased_items = order.line_items.map do |line_item|
+        next unless line_item.variant
+
+        {
+          id: line_item.variant.sku,
+          name: line_item.variant.name,
+          price: line_item.total,
+          variant: line_item.variant.options_text,
+          quantity: line_item.quantity
+        }
+    end.compact
+end
+%>
+<script type="text/javascript" data-tag="google-tag-manager">
+    window.dataLayer = window.dataLayer || [];
+
+    <% if just_purchased %>
+        window.dataLayer.push({
+            'ecommerce': {
+                'purchase': {
+                    'actionField': <%== order_data.to_json %>,
+                    'products': <%== purchased_items.to_json %>
+                }
+            }
+        });
+
+        window.solidusSeoDataLayer('google-tag-manager', 'purchase');
+    <% end %>
+
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','<%= ENV['GOOGLE_TAG_MANAGER_ID'] %>');
+</script>
