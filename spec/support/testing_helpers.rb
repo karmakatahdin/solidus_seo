@@ -10,13 +10,17 @@ module TestingHelpers
     end
   end
 
-  def checkout_stubs(order, user = nil)
-    user ||= order.user
+  def current_order_stubs(order)
     allow_any_instance_of(Spree::CheckoutController).to receive_messages(current_order: order)
+    allow_any_instance_of(Spree::OrdersController).to receive_messages(current_order: order)
+  end
 
-    if user
-      allow_any_instance_of(Spree::CheckoutController).to receive_messages(try_spree_current_user: user)
-      allow_any_instance_of(Spree::OrdersController).to receive_messages(try_spree_current_user: user)
-    end
+  # Builds a regex matcher for script tag contents
+  # @param tag_name [String] Value of script's data-tag attribute
+  # @param matches [Array] Keywords that must appear in script contents (order matters!)
+  # @return [Object] Returns a capybara matcher for a script tag with specific attributes and contents
+  def track_analytics_event(tag_name, event_name, matches)
+    matches = matches.flatten.map {|v| Regexp.escape(v.to_s) }.join('.+')
+    have_selector :css, "script[data-tag=#{tag_name}][data-fired-events=#{event_name}]", visible: false, text: /#{matches}/i
   end
 end

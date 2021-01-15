@@ -1,14 +1,17 @@
-describe "Checkout complete", type: :system do
+# frozen_string_literal: true
+
+describe 'Checkout complete', type: :system do
   let!(:store) { Spree::Store.default }
   let!(:taxon) { create :taxon, name: 'MyTaxon' }
   let!(:order) { create :completed_order_with_totals }
   let!(:line_item) { order.line_items.first }
-  let(:user) { Spree::User.first }
+
+  stub_authorization!
 
   subject { visit spree.order_path(order) }
 
   before do
-    checkout_stubs(order)
+    current_order_stubs(order)
     stub_const 'ENV', ENV.to_h.merge(env_variable => 'XXX-YYYYY')
     allow_any_instance_of(Spree::OrdersHelper).to receive(:order_just_completed?).with(order) { true }
   end
@@ -18,7 +21,7 @@ describe "Checkout complete", type: :system do
 
     it 'includes and executes a purchase event script' do
       subject
-      expect(page).to matcher_for 'google-tag-manager', ['ecommerce', 'purchase', order.number, order.total, line_item.sku]
+      expect(page).to track_analytics_event 'google-tag-manager', 'purchase', ['ecommerce', 'purchase', order.number, order.total, line_item.sku]
     end
   end
 
@@ -27,7 +30,7 @@ describe "Checkout complete", type: :system do
 
     it 'includes and executes a purchase event script' do
       subject
-      expect(page).to matcher_for 'google-analytics', [
+      expect(page).to track_analytics_event 'google-analytics', 'purchase', [
         'event', 'purchase', 'transaction_id', order.number,
         order.total, line_item.sku, line_item.variant.name,
         line_item.price, line_item.variant.options_text
@@ -40,7 +43,7 @@ describe "Checkout complete", type: :system do
 
     it 'includes and executes a purchase event script' do
       subject
-      expect(page).to matcher_for :facebook, ['track', 'Purchase', order.total, line_item.sku, line_item.quantity, order.number]
+      expect(page).to track_analytics_event :facebook, 'purchase', ['track', 'Purchase', order.total, line_item.sku, line_item.quantity, order.number]
     end
   end
 
@@ -49,16 +52,7 @@ describe "Checkout complete", type: :system do
 
     it 'includes and executes a purchase event script' do
       subject
-      expect(page).to matcher_for :pinterest, ['track', 'checkout', order.total, line_item.sku, line_item.name, line_item.price]
+      expect(page).to track_analytics_event :pinterest, 'purchase', ['track', 'checkout', order.total, line_item.sku, line_item.name, line_item.price]
     end
   end
-end
-
-# Builds a regex matcher for script tag contents
-# @param tag_name [String] Value of script's data-tag attribute
-# @param matches [Array] Keywords that must appear in script contents (order matters!)
-# @return [Object] Returns a capybara matcher for a script tag with specific attributes and contents
-def matcher_for(tag_name, matches)
-  matches = matches.flatten.map {|v| Regexp.escape(v.to_s) }.join('.+')
-  have_selector :css, "script[data-tag=#{tag_name}][data-fired-events=purchase]", visible: false, text: /#{matches}/i
 end
