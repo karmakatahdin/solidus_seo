@@ -41,7 +41,7 @@ module Spree
     end
 
     def in_stock?
-      variants_including_master.suppliable.any?
+      available? && variants_including_master.suppliable.any?
     end
 
     def seo_data
