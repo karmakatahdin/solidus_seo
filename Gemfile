@@ -21,6 +21,7 @@ gem 'pg'
 
 group :test do
   gem 'deface'
+  gem 'webdrivers'
 end
 
 gemspec
