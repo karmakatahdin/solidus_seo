@@ -2,7 +2,7 @@ require_dependency 'solidus_seo/jsonld/base'
 
 module SolidusSeo
   module Jsonld
-    class List < Base
+    class List < SolidusSeo::Jsonld::Base
       attr_accessor :data, :list_items
 
       def initialize(data)
