@@ -1,0 +1,84 @@
+<%
+return if ENV['PINTEREST_TAG_ID'].blank?
+
+product_data = {}
+add_to_cart_data = {}
+order_data = {}
+em_data = {}
+
+user_email = current_order&.email || try_spree_current_user&.email
+if user_email.present?
+    em_data = { em: user_email }
+end
+
+if just_purchased
+    order_data = {
+        value: order.total,
+        currency: order.currency,
+        order_quantity: order.line_items.sum(&:quantity),
+        line_items: order.line_items.map do |line_item|
+            next unless line_item.variant
+
+            {
+                product_id: line_item.variant.product.master.sku,
+                product_name: line_item.variant.name,
+                product_variant_id: line_item.variant.sku,
+                product_variant: line_item.variant.options_text,
+                product_quantity: line_item.quantity,
+                product_price: line_item.price
+            }
+        end.compact
+    }
+end
+
+if @product
+    product_data = {
+        line_items: [
+            {
+                product_name: @product.name,
+                product_id: @product.master.sku
+            }
+        ]
+    }
+end
+
+if flash[:added_to_cart].present?
+    add_to_cart_data = {
+        value: order.total,
+        currency: order.currency,
+        order_id: order.number,
+        line_items: flash[:added_to_cart].map do |variant_sku, variant|
+            {
+                product_id: variant['id'],
+                product_name: variant['name'],
+                product_variant_id: variant_sku,
+                product_variant: variant['variant'],
+                product_price: variant['price'],
+                product_quantity: variant['quantity']
+            }
+        end
+    }
+end
+%>
+<script type="text/javascript" data-tag="pinterest">
+    !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+
+    pintrk('load', '<%= ENV['PINTEREST_TAG_ID'] %>' <%== em_data.present? ? ", #{em_data.to_json}" : '' %>);
+    pintrk('page');
+
+    pintrk('track', 'pagevisit'<%== product_data.present? ? ", #{product_data.to_json}" : '' %>);
+    window.solidusSeoDataLayer('pinterest', 'pagevisit');
+
+    <% if add_to_cart_data.present? %>
+        pintrk('track', 'addtocart', <%== add_to_cart_data.to_json %>);
+        window.solidusSeoDataLayer('pinterest', 'addtocart');
+    <% end %>
+
+    <% if order_data.present? %>
+        pintrk('track', 'checkout', <%== order_data.to_json %>);
+        window.solidusSeoDataLayer('pinterest', 'purchase');
+    <% end %>
+ </script>
+ <noscript>
+   <img height="1" width="1" style="display:none;" alt="" src="https://ct.pinterest.com/v3/?tid=<%= ENV['PINTEREST_TAG_ID'] %>&event=init&noscript=1" />
+ </noscript>

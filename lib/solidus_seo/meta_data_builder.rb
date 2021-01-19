@@ -1,4 +1,3 @@
-require_dependency 'spree/base_helper_decorator'
 require_dependency 'solidus_seo/helpers/base_helper'
 
 module SolidusSeo

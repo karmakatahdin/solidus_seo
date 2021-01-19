@@ -15,7 +15,7 @@ module SolidusSeo
 
       def as_list_item(item)
         # `item` in the form of [text, url]
-        breadcrumb_text, breadcrumb_url = *item
+        breadcrumb_text, breadcrumb_url = item
 
         {
           '@type': 'ListItem',
