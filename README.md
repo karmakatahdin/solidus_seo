@@ -43,26 +43,24 @@ Here are the changes we make, via deface, in the default Solidus views as part o
   - Replace the `<%== meta_data_tags %>` line for `<%= display_meta_tags %>`.
   - Remove the `<title>` tag (`display_meta_tags` generates a new title tag).
 
-
 - In `spree/layouts/spree_application.html.erb`
   - Insert `<%= render 'solidus_seo/analytics' %>` just before `</head>`.
   - Insert `<%= dump_jsonld %>` just before the `</body>` closing tag.
-
+  - Replace `<%= taxon_breadcrumbs(@taxon) %>` with (`<%= taxon_breadcrumbs_jsonld(@taxon) %>`) which does the same as the original plus prints a JSON-LD tag.
 
 - In `spree/products/show.html.erb`:
   - Insert `<%= jsonld @product %>` anywhere inside the `cache` block.
 
-
 - In `spree/shared/_products.html.erb`:
-  - Insert `<% jsonld_list(products) %>` at the bottom of the file. (Notice this helper doesn't generate any output, as instead it simply adds to the data that's later outputted by dump_jsonld)
+  - Insert `<% jsonld_list(products) %>` at the bottom of the file. (Notice this helper doesn't generate any output, as instead it simply adds to the data that's later outputted by `dump_jsonld`)
 
 At this point, assuming you're using the default Solidus views and this extension's deface overrides, the features you've gained are:
 
   - Default meta tags including open graph tags, describing a product on the PDP pages, and describing the store/site in all other pages.
-  - Store jsonld markup on all your pages.
-  - Product jsonld markup in your PDP pages.
-  - Breadcrumb jsonld markup in your taxon pages.
-  - ItemList jsonld markup in your paginated product pages.
+  - Store JSON-LD markup on all your pages.
+  - Product JSON-LD markup in your PDP pages.
+  - Breadcrumb JSON-LD markup in your taxon pages.
+  - ItemList JSON-LD markup in your paginated product pages.
   - Site-wide default paperclip image optimization (through image_optim)
   - Page view and eCommerce conversion tracking (completed checkouts) enabled via presence of `GOOGLE_TAG_MANAGER_ID`, `GOOGLE_ANALYTICS_ID`, `FACEBOOK_PIXEL_ID`, `PINTEREST_TAG_ID` environment variables (only one Google integration should be enabled at a time).
 
@@ -70,7 +68,7 @@ At this point, assuming you're using the default Solidus views and this extensio
 
 This gem is intended to provide a progressive implementation approach. To begin with, it defines some methods in your models to be used as an interface/source of your meta data. Moreover, it already provides some useful defaults that can be easily extended and customized, all inside your Spree models, via decorators.
 
-Practically speaking, what this means is that simply by setting your store's metadata from the admin and calling the display_meta_tags helper in your layout, you'll get basic jsonld data included for your store. The output would be similar to the following:
+Practically speaking, what this means is that simply by setting your store's metadata from the admin and calling the display_meta_tags helper in your layout, you'll get basic JSON-LD data included for your store. The output would be similar to the following:
 
 ```json
 {
@@ -114,9 +112,9 @@ The basic requirements for the return values of your methods are straight-forwar
 
       and
 
-  - `jsonld_data` must return a hash, holding a [jsonld definition](https://en.wikipedia.org/wiki/JSON-LD).
+  - `jsonld_data` must return a hash, holding a [JSON-LD definition](https://en.wikipedia.org/wiki/JSON-LD).
 
-For the purpose of illustration, a simple example could be adding a new file to your Solidus app, `app/models/spree/order_decorator.rb`, to implement the jsonld_data interface for `Spree::Order`; the override for the seo_data interface would be placed and implemented similarly. [NOTE: To be clear, this extension provides no default implementation for `Spree::Order.jsonld_data` - the code below is meant solely as an example override for those new to Solidus and who, accordingly, might be unfamiliar with its override mechanics (decorators).]
+For the purpose of illustration, a simple example could be adding a new file to your Solidus app, `app/models/spree/order_decorator.rb`, to implement the `jsonld_data` interface for `Spree::Order`; the override for the seo_data interface would be placed and implemented similarly. NOTE: To be clear, this extension provides no default implementation for `Spree::Order.jsonld_data` - the code below is meant solely as an example override for those new to Solidus and who, accordingly, might be unfamiliar with its override mechanics (decorators).
 
 ```ruby
 # app/models/spree/order_decorator.rb
@@ -152,19 +150,19 @@ Spree::Order.class_eval do
 end
 ```
 
-After adding the new decorator, all that's left would be adding a call to jsonld on the object within your view, such as:
+After adding the new decorator, all that's left would be adding a call to `jsonld` helper on the object, such as:
 
 ```erb
 <%= jsonld(@order) %>
 ```
 
-[In short, `jsonld` is a helper that parses any object that implements the `to_jsonld` method (added by `SolidusSeo::Model` module), which in turn makes use of the `jsonld_data` method, and returns a script tag.]
+In short, `jsonld` parses any object that implements the `to_jsonld` method (added by `SolidusSeo::Model` module), which in turn makes use of the `jsonld_data` method, and returns a script tag.
 
-Besides these base methods, there are some model-specific ones for Spree::Store and Spree::Product which are explained in the following sections. These are intended to provide you with some additional common and useful data.
+Besides these base methods, there are some model-specific ones for `Spree::Store` and `Spree::Product` which are explained in the following sections. These are intended to provide you with some additional common and useful data.
 
 #### Spree::Store
 
-Again, even without any additional work beyond the initial installation, you get a solid/basic jsonld definition for your Spree::Store model. By default:
+Again, even without any additional work beyond the initial installation, you get a solid/basic JSON-LD definition for your `Spree::Store` model. By default:
 
 ```json
 {
