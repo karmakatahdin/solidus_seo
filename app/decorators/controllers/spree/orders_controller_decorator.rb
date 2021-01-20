@@ -24,21 +24,24 @@ module Spree
       end.to_h.compact
 
       cart_diff = cart_diff.map do |variant_sku, quantity|
-        variant = Spree::Variant.find_by(sku: variant_sku)
+        variant_hash = cart_diff_variant_payload(variant_sku)
+        variant_hash[:quantity] = quantity
 
-        [
-          variant_sku,
-          {
-            id: variant.product.master.sku,
-            name: variant.product.name,
-            variant: variant.options_text,
-            price: variant.price,
-            quantity: quantity
-          }
-        ]
+        [variant_sku, variant_hash]
       end.to_h
 
       flash[:added_to_cart] = cart_diff if cart_diff.present?
+    end
+
+    def cart_diff_variant_payload(sku)
+      variant = Spree::Variant.find_by(sku: sku)
+
+      {
+        id: variant.product.master.sku,
+        name: variant.product.name,
+        variant: variant.options_text,
+        price: variant.price
+      }
     end
 
     def order_contents_hash
