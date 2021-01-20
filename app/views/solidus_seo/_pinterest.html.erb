@@ -6,7 +6,7 @@ add_to_cart_data = {}
 order_data = {}
 em_data = {}
 
-user_email = current_order&.email || try_spree_current_user&.email
+user_email = try_spree_current_user&.email || current_order&.email
 if user_email.present?
     em_data = { em: user_email }
 end
