@@ -17,10 +17,10 @@ module Spree
     end
 
     def seo_images
-      return [] unless display_image.attachment.file?
+      return [] unless gallery.images.any? && gallery.images.first.attachment.file?
 
       [
-        url_helper.image_url(display_image.attachment.url(:large), host: store_host),
+        url_helper.image_url(gallery.images.first.attachment.url(:large), host: store_host),
       ].compact
     end
 
