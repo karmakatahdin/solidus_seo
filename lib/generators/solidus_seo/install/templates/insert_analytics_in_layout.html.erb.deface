@@ -1,4 +1,4 @@
 <!--
-insert_bottom %{head}
+insert_bottom %{body}
 -->
 <%= render 'solidus_seo/analytics' %>
