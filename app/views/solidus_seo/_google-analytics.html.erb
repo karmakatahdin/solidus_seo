@@ -25,16 +25,17 @@ if just_purchased
 end
 %>
 <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GOOGLE_ANALYTICS_ID'] %>"></script>
-<script type="text/javascript" data-tag="google-analytics">
-    window.dataLayer = window.dataLayer || [];
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    function gtag(){ dataLayer.push(arguments); }
-
-    gtag('js', new Date());
-    gtag('config', '<%= ENV['GOOGLE_ANALYTICS_ID'] %>');
-
-    <% if just_purchased %>
-        gtag('event', 'purchase', <%== order_data.to_json %>);
-        window.solidusSeoDataLayer('google-analytics', 'purchase');
-    <% end %>
+  gtag('config', '<%= ENV['GOOGLE_ANALYTICS_ID'] %>');
 </script>
+
+<% if just_purchased %>
+  <script data-tag="google-analytics">
+    gtag('event', 'purchase', <%== order_data.to_json %>);
+    window.solidusSeoDataLayer('google-analytics', 'purchase');
+  </script>
+<% end %>
