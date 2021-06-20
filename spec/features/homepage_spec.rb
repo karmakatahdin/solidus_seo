@@ -59,4 +59,19 @@ describe "Homepage", type: :system do
       expect(page).to have_css "meta[property='og:description'][content='#{seo_description}']", visible: false
     end
   end
+
+  context 'noscript tags' do
+    context 'when GOOGLE_TAG_MANAGER_ID is present' do
+      let(:env_variable) { 'GOOGLE_TAG_MANAGER_ID' }
+
+      before do
+        stub_const 'ENV', ENV.to_h.merge(env_variable => 'XXX-YYYYY')
+      end
+
+      it 'contains noscript tag for GTM' do
+        subject
+        expect(page).to have_text :all, "https://www.googletagmanager.com/ns.html"
+      end
+    end
+  end
 end

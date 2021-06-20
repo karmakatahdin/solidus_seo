@@ -43,7 +43,7 @@ module SolidusSeo
       end
 
       def jsonld_fetch(type = :base, items = nil, opts = {})
-        force = opts.extract!(:force) || false
+        force = opts.delete(:force) || false
 
         jsonld_cache_key = [:jsonld, items, *opts.values].compact
 

@@ -1,0 +1,4 @@
+<!--
+insert_top "body"
+-->
+<%= render 'solidus_seo/noscript_tags' %>
