@@ -45,6 +45,7 @@ Here are the changes we make, via deface, in the default Solidus views as part o
 
 - In `spree/layouts/spree_application.html.erb`
   - Insert `<%= render 'solidus_seo/analytics' %>` just before `</head>`.
+  - Insert `<%= render 'solidus_seo/noscript_tags' %>` immediately after the `<body>` opening tag.
   - Insert `<%= dump_jsonld %>` just before the `</body>` closing tag.
   - Replace `<%= taxon_breadcrumbs(@taxon) %>` with (`<%= taxon_breadcrumbs_jsonld(@taxon) %>`) which does the same as the original plus prints a JSON-LD tag.
 
