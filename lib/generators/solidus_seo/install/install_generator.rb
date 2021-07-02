@@ -36,6 +36,7 @@ module SolidusSeo
           copy_file 'insert_analytics_in_layout.html.erb.deface', 'app/overrides/spree/layouts/spree_application/insert_analytics_in_layout.html.erb.deface'
           copy_file 'replace_taxon_breadcrumbs_helper.html.erb.deface', 'app/overrides/spree/layouts/spree_application/replace_taxon_breadcrumbs_helper.html.erb.deface'
           copy_file 'insert_noscript_tags.html.erb.deface', 'app/overrides/spree/layouts/spree_application/insert_noscript_tags.html.erb.deface'
+          copy_file 'replace_flash_messages_helper.html.erb.deface', 'app/overrides/spree/layouts/spree_application/replace_flash_messages_helper.html.erb.deface'
         end
       end
     end

@@ -1,0 +1,5 @@
+<!--
+replace %{erb[loud]:contains("flash_messages")}
+original "<%= flash_messages %>"
+-->
+<%= flash_messages(ignore_types: 'added_to_cart') %>
