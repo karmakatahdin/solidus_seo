@@ -97,6 +97,17 @@ describe "Product page", type: :system do
       stub_const 'ENV', ENV.to_h.merge(env_variable => 'XXX-YYYYY')
     end
 
+    context 'when FACEBOOK_PIXEL_ID environment variable is present' do
+      let(:env_variable) { 'FACEBOOK_PIXEL_ID' }
+
+      it 'tracks "ViewContent" event with product data' do
+        subject
+        expect(page).to track_analytics_event :facebook, 'productview', [
+          'fbq', 'track', 'ViewContent', product.name, product.master.sku
+        ]
+      end
+    end
+
     context 'when PINTEREST_TAG_ID environment variable is present' do
       let(:env_variable) { 'PINTEREST_TAG_ID' }
 
