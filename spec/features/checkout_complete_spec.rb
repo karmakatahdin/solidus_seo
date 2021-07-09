@@ -19,7 +19,7 @@ describe 'Checkout complete', type: :system do
   context 'when GOOGLE_TAG_MANAGER_ID environment variable is present' do
     let(:env_variable) { 'GOOGLE_TAG_MANAGER_ID' }
 
-    it 'includes and executes a purchase event script' do
+    it 'tracks "purchase" event with product data' do
       subject
       expect(page).to track_analytics_event 'google-tag-manager', 'purchase', ['ecommerce', 'purchase', order.number, order.total, line_item.sku]
     end
@@ -28,7 +28,7 @@ describe 'Checkout complete', type: :system do
   context 'when GOOGLE_ANALYTICS_ID environment variable is present' do
     let(:env_variable) { 'GOOGLE_ANALYTICS_ID' }
 
-    it 'includes and executes a purchase event script' do
+    it 'tracks "purchase" event with product data' do
       subject
       expect(page).to track_analytics_event 'google-analytics', 'purchase', [
         'event', 'purchase', 'transaction_id', order.number,
@@ -41,7 +41,7 @@ describe 'Checkout complete', type: :system do
   context 'when FACEBOOK_PIXEL_ID environment variable is present' do
     let(:env_variable) { 'FACEBOOK_PIXEL_ID' }
 
-    it 'includes and executes a purchase event script' do
+    it 'tracks "Purchase" event with product data' do
       subject
       expect(page).to track_analytics_event :facebook, 'purchase', ['track', 'Purchase', order.total, line_item.sku, line_item.quantity, order.number]
     end
@@ -50,7 +50,7 @@ describe 'Checkout complete', type: :system do
   context 'when PINTEREST_TAG_ID environment variable is present' do
     let(:env_variable) { 'PINTEREST_TAG_ID' }
 
-    it 'includes and executes a purchase event script' do
+    it 'tracks "checkout" event with product data' do
       subject
       expect(page).to track_analytics_event :pinterest, 'purchase', ['track', 'checkout', order.total, line_item.sku, line_item.name, line_item.price]
     end

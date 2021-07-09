@@ -1,6 +1,10 @@
 <%
 return if ENV['FACEBOOK_PIXEL_ID'].blank?
 
+product_data = {}
+add_to_cart_data = {}
+order_data = {}
+
 if just_purchased
     order_data = {
         value: order.total,
@@ -20,6 +24,24 @@ if just_purchased
         promo_total: order.promo_total
     }
 end
+
+if flash[:added_to_cart].present?
+    add_to_cart_data = {
+        currency: order.currency,
+        content_type: 'product',
+        contents: flash[:added_to_cart].map do |variant_sku, variant|
+            { id: variant_sku, quantity: variant['quantity'] }
+        end
+    }
+end
+
+if @product
+    product_data = {
+        content_type: 'product',
+        content_name: @product.name,
+        content_ids: [@product.master.sku]
+    }
+end
 %>
 <script type="text/javascript" data-tag="facebook">
     !function(f,b,e,v,n,t,s) {if (f.fbq) return;n = f.fbq = function() { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };if (!f._fbq) f._fbq=n;n.push = n; n.loaded = !0; n.version = '2.0'; n.queue=[]; t = b.createElement(e); t.async = !0; t.src = v;s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);}(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
@@ -27,9 +49,19 @@ end
     fbq('init', '<%= ENV['FACEBOOK_PIXEL_ID'] %>');
     fbq('track', 'PageView');
 
-    <% if just_purchased %>
+    <% if order_data.present? %>
         fbq('track', 'Purchase', <%== order_data.to_json %>);
         window.solidusSeoDataLayer('facebook', 'purchase');
+    <% end %>
+
+    <% if add_to_cart_data.present? %>
+        fbq('track', 'AddToCart', <%== add_to_cart_data.to_json %>);
+        window.solidusSeoDataLayer('facebook', 'addtocart');
+    <% end %>
+
+    <% if product_data.present? %>
+        fbq('track', 'ViewContent', <%== product_data.to_json %>);
+        window.solidusSeoDataLayer('facebook', 'productview');
     <% end %>
 </script>
 <noscript>

@@ -15,6 +15,16 @@ describe 'Add to cart', type: :system do
     find('#add-to-cart-button').click
   end
 
+  context 'when FACEBOOK_PIXEL_ID environment variable is present' do
+    let(:env_variable) { 'FACEBOOK_PIXEL_ID' }
+
+    it 'tracks "add to cart" event with product data' do
+      expect(page).to track_analytics_event :facebook, 'addtocart', [
+        'fbq', 'track', 'AddToCart', line_item.sku
+      ]
+    end
+  end
+
   context 'when PINTEREST_TAG_ID environment variable is present' do
     let(:env_variable) { 'PINTEREST_TAG_ID' }
 
