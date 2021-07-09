@@ -48,6 +48,7 @@ Here are the changes we make, via deface, in the default Solidus views as part o
   - Insert `<%= render 'solidus_seo/noscript_tags' %>` immediately after the `<body>` opening tag.
   - Insert `<%= dump_jsonld %>` just before the `</body>` closing tag.
   - Replace `<%= taxon_breadcrumbs(@taxon) %>` with (`<%= taxon_breadcrumbs_jsonld(@taxon) %>`) which does the same as the original plus prints a JSON-LD tag.
+  - Replace `<%= flash_messages %>` with (`<%= flash_messages(ignore_types: 'added_to_cart') %>`) which does the same as the original plus prints a JSON-LD tag.
 
 - In `spree/products/show.html.erb`:
   - Insert `<%= jsonld @product %>` anywhere inside the `cache` block.

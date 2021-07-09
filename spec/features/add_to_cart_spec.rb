@@ -34,6 +34,10 @@ describe 'Add to cart', type: :system do
         line_item.name, line_item.variant.sku, line_item.variant.price
       ]
     end
+
+    it 'skips printing a flash message to the user with added_to_cart raw data' do
+      expect(page).to_not have_css '.flash.added_to_cart'
+    end
   end
 end
 
