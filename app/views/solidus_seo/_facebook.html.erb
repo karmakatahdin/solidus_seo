@@ -1,20 +1,16 @@
 <%
 return if ENV['FACEBOOK_PIXEL_ID'].blank?
 
-product_data = {}
-add_to_cart_data = {}
-order_data = {}
+event_data = {}
 
 if just_purchased
-    order_data = {
+    event_data[:order] = {
         value: order.total,
         currency: order.currency,
         content_type: 'product',
         contents: order.line_items.map do |line_item|
-            next unless line_item.variant
-
             { id: line_item.variant.sku, quantity: line_item.quantity }
-        end.compact,
+        end,
 
         # custom properties
         order_number: order.number,
@@ -26,7 +22,7 @@ if just_purchased
 end
 
 if flash[:added_to_cart].present?
-    add_to_cart_data = {
+    event_data[:added_to_cart] = {
         currency: order.currency,
         content_type: 'product',
         contents: flash[:added_to_cart].map do |variant_sku, variant|
@@ -35,13 +31,24 @@ if flash[:added_to_cart].present?
     }
 end
 
+if flash[:checkout_initiated].present?
+    event_data[:checkout] = {
+        value: order.total,
+        currency: order.currency,
+        contents: order.line_items.map do |line_item|
+            { id: line_item.variant.sku, quantity: line_item.quantity }
+        end
+    }
+end
+
 if @product
-    product_data = {
+    event_data[:current_product] = {
         content_type: 'product',
         content_name: @product.name,
         content_ids: [@product.master.sku]
     }
 end
+
 %>
 <script type="text/javascript" data-tag="facebook">
     !function(f,b,e,v,n,t,s) {if (f.fbq) return;n = f.fbq = function() { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };if (!f._fbq) f._fbq=n;n.push = n; n.loaded = !0; n.version = '2.0'; n.queue=[]; t = b.createElement(e); t.async = !0; t.src = v;s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);}(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
@@ -49,19 +56,24 @@ end
     fbq('init', '<%= ENV['FACEBOOK_PIXEL_ID'] %>');
     fbq('track', 'PageView');
 
-    <% if order_data.present? %>
-        fbq('track', 'Purchase', <%== order_data.to_json %>);
+    <% if event_data[:order].present? %>
+        fbq('track', 'Purchase', <%== event_data[:order].to_json %>);
         window.solidusSeoDataLayer('facebook', 'purchase');
     <% end %>
 
-    <% if add_to_cart_data.present? %>
-        fbq('track', 'AddToCart', <%== add_to_cart_data.to_json %>);
+    <% if event_data[:added_to_cart].present? %>
+        fbq('track', 'AddToCart', <%== event_data[:added_to_cart].to_json %>);
         window.solidusSeoDataLayer('facebook', 'addtocart');
     <% end %>
 
-    <% if product_data.present? %>
-        fbq('track', 'ViewContent', <%== product_data.to_json %>);
-        window.solidusSeoDataLayer('facebook', 'productview');
+    <% if event_data[:checkout].present? %>
+        fbq('track', 'InitiateCheckout', <%== event_data[:checkout].to_json %>);
+        window.solidusSeoDataLayer('facebook', 'initiatecheckout');
+    <% end %>
+
+    <% if event_data[:current_product].present? %>
+        fbq('track', 'ViewContent', <%== event_data[:current_product].to_json %>);
+        window.solidusSeoDataLayer('facebook', 'viewcontent');
     <% end %>
 </script>
 <noscript>
