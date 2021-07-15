@@ -2,28 +2,26 @@
 return if ENV['GOOGLE_ANALYTICS_ID'].present? || ENV['GOOGLE_TAG_MANAGER_ID'].blank?
 
 if just_purchased
-  order_data = {
-    id: order.number,
-    revenue: order.total,
-    coupon: '', # TODO: Add coupon code if present
+    order_data = {
+        id: order.number,
+        revenue: order.total,
+        coupon: '', # TODO: Add coupon code if present
 
-    affiliation: current_store.name,
-    currency: order.currency,
-    tax: order.tax_total,
-    shipping: order.ship_total
-  }
-
-  purchased_items = order.line_items.map do |line_item|
-    next unless line_item.variant
-
-    {
-      id: line_item.variant.sku,
-      name: line_item.variant.name,
-      price: line_item.total,
-      variant: line_item.variant.options_text,
-      quantity: line_item.quantity
+        affiliation: current_store.name,
+        currency: order.currency,
+        tax: order.tax_total,
+        shipping: order.ship_total
     }
-  end.compact
+
+    purchased_items = order.line_items.map do |line_item|
+        {
+          id: line_item.variant.sku,
+          name: line_item.variant.name,
+          price: line_item.total,
+          variant: line_item.variant.options_text,
+          quantity: line_item.quantity
+        }
+    end
 end
 %>
 <script type="text/javascript" data-tag="google-tag-manager">

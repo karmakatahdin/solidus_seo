@@ -1,5 +1,5 @@
 describe "Taxon page", type: :system do
-  let!(:store) { Spree::Store.default }
+  let!(:store) { create(:store) }
   let(:seo_name) { 'My store SEO name' }
   let(:seo_image) { 'https://example.com/path/store.jpg' }
   let(:seo_description) { 'My store SEO description' }
