@@ -1,10 +1,7 @@
 <%
 return if ENV['PINTEREST_TAG_ID'].blank?
 
-product_data = {}
-add_to_cart_data = {}
-order_data = {}
-em_data = {}
+event_data = {}
 
 user_email = try_spree_current_user&.email || current_order&.email
 if user_email.present?
@@ -12,7 +9,7 @@ if user_email.present?
 end
 
 if just_purchased
-    order_data = {
+    event_data[:order] = {
         value: order.total,
         currency: order.currency,
         order_quantity: order.line_items.sum(&:quantity),
@@ -32,7 +29,7 @@ if just_purchased
 end
 
 if @product
-    product_data = {
+    event_data[:product] = {
         line_items: [
             {
                 product_name: @product.name,
@@ -43,7 +40,7 @@ if @product
 end
 
 if flash[:added_to_cart].present?
-    add_to_cart_data = {
+    event_data[:added_to_cart] = {
         value: order.total,
         currency: order.currency,
         order_id: order.number,
@@ -66,16 +63,16 @@ end
     pintrk('load', '<%= ENV['PINTEREST_TAG_ID'] %>' <%== em_data.present? ? ", #{em_data.to_json}" : '' %>);
     pintrk('page');
 
-    pintrk('track', 'pagevisit'<%== product_data.present? ? ", #{product_data.to_json}" : '' %>);
+    pintrk('track', 'pagevisit'<%== event_data[:product].present? ? ", #{event_data[:product].to_json}" : '' %>);
     window.solidusSeoDataLayer('pinterest', 'pagevisit');
 
-    <% if add_to_cart_data.present? %>
-        pintrk('track', 'addtocart', <%== add_to_cart_data.to_json %>);
+    <% if event_data[:added_to_cart].present? %>
+        pintrk('track', 'addtocart', <%== event_data[:added_to_cart].to_json %>);
         window.solidusSeoDataLayer('pinterest', 'addtocart');
     <% end %>
 
-    <% if order_data.present? %>
-        pintrk('track', 'checkout', <%== order_data.to_json %>);
+    <% if event_data[:order].present? %>
+        pintrk('track', 'checkout', <%== event_data[:order].to_json %>);
         window.solidusSeoDataLayer('pinterest', 'purchase');
     <% end %>
  </script>

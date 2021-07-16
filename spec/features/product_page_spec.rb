@@ -1,5 +1,5 @@
 describe "Product page", type: :system do
-  let!(:store) { Spree::Store.default }
+  let!(:store) { create(:store) }
   let(:store_seo_name) { 'My store SEO name' }
 
   let!(:taxon) { create(:taxon, name: 'MyTaxon') }
@@ -102,7 +102,7 @@ describe "Product page", type: :system do
 
       it 'tracks "ViewContent" event with product data' do
         subject
-        expect(page).to track_analytics_event :facebook, 'productview', [
+        expect(page).to track_analytics_event :facebook, 'viewcontent', [
           'fbq', 'track', 'ViewContent', product.name, product.master.sku
         ]
       end

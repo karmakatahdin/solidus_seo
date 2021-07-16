@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Add to cart', type: :system do
-  let!(:store) { Spree::Store.default }
+  let!(:store) { create(:store) }
   let!(:order) { create :completed_order_with_totals }
   let!(:line_item) { order.line_items.first }
 

@@ -6,8 +6,6 @@ if just_purchased
         transaction_id: order.number,
         value: order.total,
         items: order.line_items.map do |line_item|
-            next unless line_item.variant
-
             {
               id: line_item.variant.sku,
               name: line_item.variant.name,
@@ -15,7 +13,7 @@ if just_purchased
               variant: line_item.variant.options_text,
               quantity: line_item.quantity
             }
-        end.compact,
+        end,
 
         affiliation: current_store.name,
         currency: order.currency,
