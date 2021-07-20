@@ -3,7 +3,7 @@ return if ENV['FACEBOOK_PIXEL_ID'].blank?
 
 event_data = {}
 
-if just_purchased
+if just_purchased && order.try(:total)
     event_data[:order] = {
         value: order.total,
         currency: order.currency,
@@ -21,7 +21,7 @@ if just_purchased
     }
 end
 
-if flash[:added_to_cart].present?
+if flash[:added_to_cart].present? && order.try(:currency)
     event_data[:added_to_cart] = {
         currency: order.currency,
         content_type: 'product',
@@ -31,7 +31,7 @@ if flash[:added_to_cart].present?
     }
 end
 
-if flash[:checkout_initiated].present?
+if flash[:checkout_initiated].present? && order.try(:total)
     event_data[:checkout] = {
         value: order.total,
         currency: order.currency,
