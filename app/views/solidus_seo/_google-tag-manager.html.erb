@@ -7,7 +7,7 @@ if just_purchased
     event_data[:order] = {
         id: order.number,
         revenue: order.total,
-        coupon: '', # TODO: Add coupon code if present
+        coupon: order.adjustments.promotion.first&.promotion_code&.value,
 
         affiliation: current_store.name,
         currency: order.currency,
