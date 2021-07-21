@@ -8,24 +8,44 @@ if user_email.present?
     em_data = { em: user_email }
 end
 
-if just_purchased
-    event_data[:order] = {
-        value: order.total,
-        currency: order.currency,
-        order_quantity: order.line_items.sum(&:quantity),
-        line_items: order.line_items.map do |line_item|
-            next unless line_item.variant
+if order.present?
+    if just_purchased
+        event_data[:order] = {
+            value: order.total,
+            currency: order.currency,
+            order_quantity: order.line_items.sum(&:quantity),
+            line_items: order.line_items.map do |line_item|
+                next unless line_item.variant
 
-            {
-                product_id: line_item.variant.product.master.sku,
-                product_name: line_item.variant.name,
-                product_variant_id: line_item.variant.sku,
-                product_variant: line_item.variant.options_text,
-                product_quantity: line_item.quantity,
-                product_price: line_item.price
-            }
-        end.compact
-    }
+                {
+                    product_id: line_item.variant.product.master.sku,
+                    product_name: line_item.variant.name,
+                    product_variant_id: line_item.variant.sku,
+                    product_variant: line_item.variant.options_text,
+                    product_quantity: line_item.quantity,
+                    product_price: line_item.price
+                }
+            end.compact
+        }
+    end
+
+    if flash[:added_to_cart].present?
+        event_data[:added_to_cart] = {
+            value: order.total,
+            currency: order.currency,
+            order_id: order.number,
+            line_items: flash[:added_to_cart].map do |variant_sku, variant|
+                {
+                    product_id: variant['id'],
+                    product_name: variant['name'],
+                    product_variant_id: variant_sku,
+                    product_variant: variant['variant'],
+                    product_price: variant['price'],
+                    product_quantity: variant['quantity']
+                }
+            end
+        }
+    end
 end
 
 if @product
@@ -39,23 +59,7 @@ if @product
     }
 end
 
-if flash[:added_to_cart].present?
-    event_data[:added_to_cart] = {
-        value: order.total,
-        currency: order.currency,
-        order_id: order.number,
-        line_items: flash[:added_to_cart].map do |variant_sku, variant|
-            {
-                product_id: variant['id'],
-                product_name: variant['name'],
-                product_variant_id: variant_sku,
-                product_variant: variant['variant'],
-                product_price: variant['price'],
-                product_quantity: variant['quantity']
-            }
-        end
-    }
-end
+
 %>
 <script type="text/javascript" data-tag="pinterest">
     !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");

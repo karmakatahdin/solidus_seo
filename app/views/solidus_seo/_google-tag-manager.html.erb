@@ -1,8 +1,10 @@
 <%
 return if ENV['GOOGLE_ANALYTICS_ID'].present? || ENV['GOOGLE_TAG_MANAGER_ID'].blank?
 
+event_data = {}
+
 if just_purchased
-    order_data = {
+    event_data[:order] = {
         id: order.number,
         revenue: order.total,
         coupon: '', # TODO: Add coupon code if present
@@ -13,7 +15,7 @@ if just_purchased
         shipping: order.ship_total
     }
 
-    purchased_items = order.line_items.map do |line_item|
+    event_data[:order_contents] = order.line_items.map do |line_item|
         {
           id: line_item.variant.sku,
           name: line_item.variant.name,
@@ -31,8 +33,8 @@ end
     window.dataLayer.push({
       'ecommerce': {
         'purchase': {
-          'actionField': <%== order_data.to_json %>,
-          'products': <%== purchased_items.to_json %>
+          'actionField': <%== event_data[:order].to_json %>,
+          'products': <%== event_data[:order_contents].to_json %>
         }
       }
     });
