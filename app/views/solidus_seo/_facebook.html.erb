@@ -3,42 +3,44 @@ return if ENV['FACEBOOK_PIXEL_ID'].blank?
 
 event_data = {}
 
-if just_purchased
-    event_data[:order] = {
-        value: order.total,
-        currency: order.currency,
-        content_type: 'product',
-        contents: order.line_items.map do |line_item|
-            { id: line_item.variant.sku, quantity: line_item.quantity }
-        end,
+if order.present?
+    if just_purchased
+        event_data[:order] = {
+            value: order.total,
+            currency: order.currency,
+            content_type: 'product',
+            contents: order.line_items.map do |line_item|
+                { id: line_item.variant.sku, quantity: line_item.quantity }
+            end,
 
-        # custom properties
-        order_number: order.number,
-        item_total: order.item_total,
-        tax_total: order.tax_total,
-        ship_total: order.ship_total,
-        promo_total: order.promo_total
-    }
-end
+            # custom properties
+            order_number: order.number,
+            item_total: order.item_total,
+            tax_total: order.tax_total,
+            ship_total: order.ship_total,
+            promo_total: order.promo_total
+        }
+    end
 
-if flash[:added_to_cart].present?
-    event_data[:added_to_cart] = {
-        currency: order.currency,
-        content_type: 'product',
-        contents: flash[:added_to_cart].map do |variant_sku, variant|
-            { id: variant_sku, quantity: variant['quantity'] }
-        end
-    }
-end
+    if flash[:added_to_cart].present?
+        event_data[:added_to_cart] = {
+            currency: order.currency,
+            content_type: 'product',
+            contents: flash[:added_to_cart].map do |variant_sku, variant|
+                { id: variant_sku, quantity: variant['quantity'] }
+            end
+        }
+    end
 
-if flash[:checkout_initiated].present?
-    event_data[:checkout] = {
-        value: order.total,
-        currency: order.currency,
-        contents: order.line_items.map do |line_item|
-            { id: line_item.variant.sku, quantity: line_item.quantity }
-        end
-    }
+    if flash[:checkout_initiated].present?
+        event_data[:checkout_initiated] = {
+            value: order.total,
+            currency: order.currency,
+            contents: order.line_items.map do |line_item|
+                { id: line_item.variant.sku, quantity: line_item.quantity }
+            end
+        }
+    end
 end
 
 if @product
@@ -66,8 +68,8 @@ end
         window.solidusSeoDataLayer('facebook', 'addtocart');
     <% end %>
 
-    <% if event_data[:checkout].present? %>
-        fbq('track', 'InitiateCheckout', <%== event_data[:checkout].to_json %>);
+    <% if event_data[:checkout_initiated].present? %>
+        fbq('track', 'InitiateCheckout', <%== event_data[:checkout_initiated].to_json %>);
         window.solidusSeoDataLayer('facebook', 'initiatecheckout');
     <% end %>
 
