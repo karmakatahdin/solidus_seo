@@ -36,6 +36,7 @@ if order.present?
         event_data[:checkout_initiated] = {
             value: order.total,
             currency: order.currency,
+            content_type: 'product',
             contents: order.line_items.map do |line_item|
                 { id: line_item.variant.sku, quantity: line_item.quantity }
             end
