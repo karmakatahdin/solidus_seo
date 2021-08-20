@@ -2,16 +2,18 @@
 
 describe 'Add to cart', type: :system do
   let!(:store) { create(:store) }
-  let!(:order) { create :completed_order_with_totals }
-  let!(:line_item) { order.line_items.first }
+  let!(:product) { create(:product) }
+  let(:line_item_quantity) { 2 }
+  let(:order) { Spree::Order.last }
+  let(:line_item) { order.line_items.first }
 
   stub_authorization!
 
   before do
-    current_order_stubs(order)
     stub_const 'ENV', ENV.to_h.merge(env_variable => 'XXX-YYYYY')
 
-    visit spree.product_path(line_item.product)
+    visit spree.product_path(product)
+    fill_in('quantity', with: line_item_quantity)
     find('#add-to-cart-button').click
   end
 
@@ -20,7 +22,7 @@ describe 'Add to cart', type: :system do
 
     it 'tracks "add to cart" event with product data' do
       expect(page).to track_analytics_event :facebook, 'addtocart', [
-        'fbq', 'track', 'AddToCart', line_item.sku
+        'fbq', 'track', 'AddToCart', line_item.amount, line_item.sku
       ]
     end
   end
@@ -30,8 +32,8 @@ describe 'Add to cart', type: :system do
 
     it 'tracks "add to cart" event' do
       expect(page).to track_analytics_event :pinterest, 'addtocart', [
-        'track', 'addtocart', order.total, order.number, line_item.variant.product.master.sku,
-        line_item.name, line_item.variant.sku, line_item.variant.price
+        'track', 'addtocart', line_item.amount, order.number, line_item.product.sku,
+        line_item.name, line_item.sku, line_item.price
       ]
     end
 

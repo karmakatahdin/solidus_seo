@@ -26,6 +26,7 @@ module Spree
       cart_diff = cart_diff.map do |variant_sku, quantity|
         variant_hash = cart_diff_variant_payload(variant_sku)
         variant_hash[:quantity] = quantity
+        variant_hash[:amount] = quantity * variant_hash[:price]
 
         [variant_sku, variant_hash]
       end.to_h
