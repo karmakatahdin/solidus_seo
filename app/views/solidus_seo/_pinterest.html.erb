@@ -31,7 +31,7 @@ if order.present?
 
     if flash[:added_to_cart].present?
         event_data[:added_to_cart] = {
-            value: order.total,
+            value: flash[:added_to_cart].sum { |sku, hash| hash['amount'].to_d },
             currency: order.currency,
             order_id: order.number,
             line_items: flash[:added_to_cart].map do |variant_sku, variant|
